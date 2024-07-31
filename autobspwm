@@ -85,7 +85,7 @@ EOF
 # sudo apt update && sudo apt upgrade -y
 # check_command "Actualización del sistema
 
-# Instalar dependencias básica
+# Instalar dependencias básicas
 sudo apt install git wget curl build-essential -y
 check_command "Instalación de dependencias básicas"
 
