@@ -187,6 +187,11 @@ install_powerlevel10k() {
     
     expect <<EOF
     spawn zsh
+    expect "Does this look like a diamond (rotated square)?"; send "y\r"
+    expect "Does this look like a lock?"; send "y\r"
+    expect "Does this look like an upwards arrow?"; send "y\r"
+    expect "What digit is the downwards arrow pointing at?"; send "1\r"
+    expect "Do all these icons fit between the crosses?"; send "y\r"
     expect "Prompt Style"; send "2\r"
     expect "Character Set"; send "1\r"
     expect "Prompt Color"; send "2\r"
