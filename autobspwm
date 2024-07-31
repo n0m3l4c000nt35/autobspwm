@@ -195,7 +195,7 @@ install_powerlevel10k() {
     # prompt_char           # prompt symbol\
   )' ~/.p10k.zsh
 
-        # Modificar RIGHT_PROMPT_ELEMENTS
+    # Modificar RIGHT_PROMPT_ELEMENTS
     sed -i '/POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=/,/)/c\
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(\
     # status                  # exit code of the last command\
