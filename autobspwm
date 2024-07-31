@@ -195,7 +195,7 @@ install_powerlevel10k() {
     expect "Prompt Style"; send "2"
     expect "Character Set"; send "1"
     expect "Prompt Color"; send "2"
-    expect "Show current time?", send "n"
+    expect "Show current time?"; send "n"
     expect "Prompt Separators"; send "1"
     expect "Prompt Heads"; send "3"
     expect "Prompt Tails"; send "4"
