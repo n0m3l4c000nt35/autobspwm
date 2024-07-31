@@ -51,19 +51,19 @@ configure_bspwm_sxhkd() {
     check_command "Configuración inicial de bspwm y sxhkd"
 
     # Modificar sxhkdrc
-    sed -i 's/super + {_,shift + }{h,j,k,l}/super + {Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
+    sed -i 's/super + {_,shift + }{h,j,k,l}/super + {_,shift + }{Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
     sed -i 's/super + ctrl + {h,j,k,l}/super + ctrl + alt + {Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
-    sed -i 's/super + alt + {h,j,k,l}/super + alt + shift + {Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
+    sed -i 's/super + {h,j,k,l}/super + alt + shift + {Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
     echo -e "\n# custom resize\nsuper + alt + {Left,Down,Up,Right}\n    ~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}" >> ~/.config/sxhkd/sxhkdrc
     check_command "Modificación de sxhkd"
 
     # Eliminar líneas específicas del sxhkdrc
     sed -i '/^# expand a window by moving one of its side outward$/d' ~/.config/sxhkd/sxhkdrc
     sed -i '/^super + alt + {h,j,k,l}$/d' ~/.config/sxhkd/sxhkdrc
-    sed -i '/^    bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}$/d' ~/.config/sxhkd/sxhkdrc
+    sed -i '/^	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}$/d' ~/.config/sxhkd/sxhkdrc
     sed -i '/^# contract a window by moving one of its side inward$/d' ~/.config/sxhkd/sxhkdrc
     sed -i '/^super + alt + shift + {h,j,k,l}$/d' ~/.config/sxhkd/sxhkdrc
-    sed -i '/^    bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}$/d' ~/.config/sxhkd/sxhkdrc
+    sed -i '/^	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}$/d' ~/.config/sxhkd/sxhkdrc
     check_command "Eliminación de líneas específicas de sxhkdrc"
 
     # Crear script bspwm_resize
