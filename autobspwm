@@ -178,30 +178,45 @@ install_fonts() {
 }
 
 install_powerlevel10k() {
-    echo -e "\n${yellow}[+}${end} Instalando powerlevel10k...\n"
+    echo -e "\n${yellow}[+]${end} Instalando powerlevel10k...\n"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
     echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
-
-    expect <<EOF
-    spawn zsh -c "p10k configure"
-    expect "Prompt Style" { send "2\r" }
-    expect "Character Set" { send "1\r" }
-    expect "Prompt Color" { send "2\r" }
-    expect "Show current time?" { send "n\r" }
-    expect "Prompt Separators" { send "1\r" }
-    expect "Prompt Heads" { send "3\r" }
-    expect "Prompt Tails" { send "4\r" }
-    expect "Prompt Height" { send "1\r" }
-    expect "Prompt Spacing" { send "2\r" }
-    expect "Icons" { send "2\r" }
-    expect "Prompt Flow" { send "2\r" }
-    expect "Enable Transient Prompt?" { send "y\r" }
-    expect "Instant Prompt Mode" { send "1\r" }
-    expect "Apply changes to ~/.zshrc?" { send "y\r" }
-    expect eof
-EOF
-    source ~/.zshrc
     check_command "Instalación de powerlevel10k"
+
+    # Simular la configuración interactiva de Powerlevel10k
+    echo -e "\n${yellow}[+]${end} Configurando Powerlevel10k...\n"
+    
+    # Crear un script temporal para la configuración
+    cat << 'EOF' > /tmp/p10k_config.zsh
+#!/usr/bin/env zsh
+exec 0< <(echo '2
+1
+2
+n
+1
+3
+4
+1
+2
+2
+2
+y
+1
+y
+')
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+p10k configure
+EOF
+
+    # Ejecutar el script de configuración
+    zsh /tmp/p10k_config.zsh
+
+    # Eliminar el script temporal
+    rm /tmp/p10k_config.zsh
+
+    check_command "Configuración de Powerlevel10k"
+
+    echo -e "\n${green}[✓]${end} Powerlevel10k ha sido instalado y configurado.\n"
 }
 
 # Actualizar el sistema
