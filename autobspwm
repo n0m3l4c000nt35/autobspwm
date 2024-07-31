@@ -1,31 +1,40 @@
 #!/bin/bash
 
+green="\e[0;32m\033[1m"
+red="\e[0;31m\033[1m"
+blue="\e[0;34m\033[1m"
+yellow="\e[0;33m\033[1m"
+purple="\e[0;35m\033[1m"
+turquoise="\e[0;36m\033[1m"
+gray="\e[0;37m\033[1m"
+end="\033[0m\e[0m"
+
 # Función para verificar si un comando se ejecutó correctamente
 check_command() {
     if [ $? -eq 0 ]; then
-        echo "[OK] $1"
+        echo -e "\n${green}[OK]${end} $1"
     else
-        echo "[ERROR] $1"
+        echo -e "\n${red}[ERROR]${end} $1"
         exit 1
     fi
 }
 
 install_bspwm() {
-    echo "Instalando bspwm..."
+    echo -e "\n${green}[+]${end} Instalando bspwm...\n"
     sudo apt install libxcb-xinerama0-dev libxcb-icccm4-dev libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev -y
     check_command "Instalación de dependencias de bspwm"
     git clone https://github.com/baskerville/bspwm.git ~/Downloads
     git clone https://github.com/baskerville/sxhkd.git ~/Downloads
     cd bspwm
     ~/Downloads/bspwm/make
-    sudo ~/Downlaos/bspwm/make install
+    sudo ~/Downloads/bspwm/make install
     check_command "Instalación de bspwm"
     which bspwm
-    check_command "Verificación de la instalacón de bspwm"
+    check_command "Verificación de la instalación de bspwm"
 }
 
 install_sxhkd() {
-    echo "Instalando sxhkd..."
+    echo -e "\n${green}[+]${end} Instalando sxhkd...\n"
     cd ~/Downloads/sxhkd
     ~/Downloads/sxhkd/make
     sudo ~/Downloads/sxhkd/make install
@@ -35,7 +44,7 @@ install_sxhkd() {
 }
 
 configure_bspwm_sxhkd() {
-    echo "Configurando bspwm y sxhkd..."
+    echo -e "\n${green}[+]${end} Configurando bspwm y sxhkd...\n"
     cp ~/Downloads/bspwm/examples/bspwmrc ~/.config/bspwm/
     chmod u+x ~/.config/bspwm/bspwmrc
     sudo apt install bspwm -y
@@ -95,7 +104,7 @@ check_command "Creación de directorios de configuración"
 
 # Función principal
 main() {
-    echo "Comenzando la personalización del sistema..."
+    echo -e "\n${green}[+]${end} Comenzando la personalización del sistema..."
     install_bspwm
     install_sxhkd
     configure_bspwm_sxhkd
