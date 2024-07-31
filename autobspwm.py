@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import shutil
 
 # Colores ANSI
 GREEN = "\033[0;32m\033[1m"
@@ -108,8 +109,73 @@ bspc node -z "$dir" "$x" "$y" || bspc node -z "$falldir" "$x" "$y"
 
 
 def install_kitty():
-    # ... (instalación de kitty como en el script original)
-    pass
+    print(f"\n{YELLOW}[+]{END} Instalando kitty...")
+
+    # Crear directorio para kitty
+    os.makedirs("/opt/kitty", exist_ok=True)
+
+    # Descargar kitty
+    run_command("wget -P ~/Downloads https://github.com/kovidgoyal/kitty/releases/download/v0.34.1/kitty-0.34.1-x86_64.txz", "Descargando kitty")
+
+    # Extraer kitty
+    os.makedirs(os.path.expanduser("~/Downloads/kitty"), exist_ok=True)
+    run_command("tar -xf ~/Downloads/kitty-0.34.1-x86_64.txz -C ~/Downloads/kitty", "Extrayendo kitty")
+
+    # Eliminar archivo comprimido
+    os.remove(os.path.expanduser("~/Downloads/kitty-0.34.1-x86_64.txz"))
+
+    # Mover kitty a /opt
+    if os.path.exists("/opt/kitty"):
+        shutil.rmtree("/opt/kitty")
+    shutil.move(os.path.expanduser("~/Downloads/kitty"), "/opt/")
+
+    print(f"{GREEN}[OK]{END} Instalación de kitty")
+
+    # Configurar sxhkd para usar kitty
+    sxhkdrc_path = os.path.expanduser("~/.config/sxhkd/sxhkdrc")
+    with open(sxhkdrc_path, "r") as file:
+        content = file.read()
+    content = content.replace("urxvt", "/opt/kitty/bin/kitty")
+    with open(sxhkdrc_path, "w") as file:
+        file.write(content)
+    print(f"{GREEN}[OK]{END} Configuración de sxhkd para kitty")
+
+    # Configurar kitty
+    os.makedirs(os.path.expanduser("~/.config/kitty"), exist_ok=True)
+    kitty_config = """font_family HackNerdFont
+cursor_shape beam
+
+map ctrl+left neighboring_window left
+map ctrl+right neighboring_window right
+map ctrl+up neighboring_window up
+map ctrl+down neighboring_window down
+
+map ctrl+shift+enter new_window_with_cwd
+map ctrl+shift+t new_tab_with_cwd
+
+map f1 copy_to_buffer a
+map f2 paste_from_buffer a
+map f3 copy_to_buffer b
+map f4 paste_from_buffer b
+
+map ctrl+shift+z toggle_layout stack
+tab_bar_style powerline
+
+inactive_tab_background #e06c75
+active_tab_background #98c379
+inactive_tab_foreground #000000
+tab_bar_margin_color #000000
+
+background_opacity 0.95
+"""
+    with open(os.path.expanduser("~/.config/kitty/kitty.conf"), "w") as file:
+        file.write(kitty_config)
+    print(f"{GREEN}[OK]{END} Configuración de kitty")
+
+    # Copiar configuración para root
+    os.makedirs("/root/.config/kitty", exist_ok=True)
+    shutil.copy(os.path.expanduser("~/.config/kitty/kitty.conf"), "/root/.config/kitty/")
+    print(f"{GREEN}[OK]{END} Copia de configuración de kitty para root")
 
 
 def install_zsh():
@@ -119,8 +185,36 @@ def install_zsh():
 
 
 def install_fonts():
-    # ... (instalación de fuentes como en el script original)
-    pass
+    print(f"\n{YELLOW}[+]{END} Instalando fuentes...")
+
+    # Descargar Hack Nerd Font
+    run_command("sudo wget -P /usr/local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip", "Descargando Hack Nerd Font")
+
+    # Descomprimir Hack Nerd Font
+    run_command("sudo unzip /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts", "Descomprimiendo Hack Nerd Font")
+
+    # Eliminar archivos innecesarios
+    run_command("sudo rm -rf /usr/local/share/fonts/Hack.zip /usr/local/share/fonts/README.md /usr/local/share/fonts/LICENSE.md", "Limpiando archivos innecesarios")
+
+    print(f"{GREEN}[OK]{END} Instalación de Hack Nerd Font")
+
+    # Clonar repositorio blue-sky
+    run_command("git clone https://github.com/VaughnValle/blue-sky.git ~/Downloads/blue-sky", "Clonando repositorio blue-sky")
+
+    # Copiar fuentes adicionales
+    try:
+        for font in os.listdir(os.path.expanduser("~/Downloads/blue-sky/polybar/fonts")):
+            shutil.copy2(os.path.join(os.path.expanduser("~/Downloads/blue-sky/polybar/fonts"), font), "/usr/share/fonts/truetype/")
+    except Exception as e:
+        print(f"{RED}[ERROR]{END} No se pudieron copiar algunas fuentes: {str(e)}")
+
+    # Actualizar cache de fuentes
+    run_command("sudo fc-cache -v", "Actualizando cache de fuentes")
+
+    # Limpiar
+    shutil.rmtree(os.path.expanduser("~/Downloads/blue-sky"))
+
+    print(f"{GREEN}[OK]{END} Instalación de fuentes adicionales")
 
 
 def install_powerlevel10k():
