@@ -2,6 +2,8 @@ import os
 import subprocess
 import sys
 import shutil
+import pexpect
+
 
 # Colores ANSI
 GREEN = "\033[0;32m\033[1m"
@@ -218,17 +220,46 @@ def install_fonts():
 
 
 def install_powerlevel10k():
+    print(f"\n{YELLOW}[+]{END} Instalando powerlevel10k...")
+
+    # Clonar powerlevel10k
     run_command("git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k", "Clonando powerlevel10k")
-    
+
     # Agregar la fuente al .zshrc
     with open(os.path.expanduser("~/.zshrc"), "a") as zshrc:
         zshrc.write('\nsource ~/powerlevel10k/powerlevel10k.zsh-theme\n')
-    
+
     print(f"\n{YELLOW}[+]{END} Iniciando configuración interactiva de Powerlevel10k...")
-    
+
     # Iniciar la configuración interactiva
-    os.system("zsh -c 'source ~/powerlevel10k/powerlevel10k.zsh-theme && p10k configure'")
+    child = pexpect.spawn('zsh -c "source ~/powerlevel10k/powerlevel10k.zsh-theme && p10k configure"', encoding='utf-8')
     
+    # Configuración según la tabla proporcionada
+    configs = [
+        ("Prompt Style", "2"),
+        ("Character Set", "1"),
+        ("Prompt Color", "2"),
+        ("Show current time?", "n"),
+        ("Prompt Separators", "1"),
+        ("Prompt Heads", "3"),
+        ("Prompt Tails", "4"),
+        ("Prompt Height", "1"),
+        ("Prompt Spacing", "2"),
+        ("Icons", "2"),
+        ("Prompt Flow", "2"),
+        ("Enable Transient Prompt?", "y"),
+        ("Instant Prompt Mode", "1"),
+        ("Apply changes to ~/.zshrc?", "y")
+    ]
+
+    for config, choice in configs:
+        child.expect_exact(config)
+        child.sendline(choice)
+        time.sleep(0.5)  # Pequeña pausa para asegurar que la entrada sea procesada
+
+    # Esperar a que termine la configuración
+    child.expect(pexpect.EOF, timeout=None)
+
     print(f"\n{GREEN}[OK]{END} Configuración de Powerlevel10k completada")
 
 
