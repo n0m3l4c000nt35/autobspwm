@@ -117,23 +117,23 @@ bspc node -z "$dir" "$x" "$y" || bspc node -z "$falldir" "$x" "$y"
 def install_kitty():
     print(f"\n{YELLOW}[+]{END} Instalando kitty...")
 
-    # Crear directorio para kitty
-    os.makedirs("/opt/kitty", exist_ok=True)
+    # Crear directorio para kitty con sudo
+    run_command("sudo mkdir -p /opt/kitty", "Creando directorio para kitty")
 
     # Descargar kitty
     run_command("wget -P ~/Downloads https://github.com/kovidgoyal/kitty/releases/download/v0.34.1/kitty-0.34.1-x86_64.txz", "Descargando kitty")
 
     # Extraer kitty
-    os.makedirs(os.path.expanduser("~/Downloads/kitty"), exist_ok=True)
-    run_command("tar -xf ~/Downloads/kitty-0.34.1-x86_64.txz -C ~/Downloads/kitty", "Extrayendo kitty")
+    temp_dir = os.path.expanduser("~/Downloads/kitty_temp")
+    os.makedirs(temp_dir, exist_ok=True)
+    run_command(f"tar -xf ~/Downloads/kitty-0.34.1-x86_64.txz -C {temp_dir}", "Extrayendo kitty")
 
     # Eliminar archivo comprimido
     os.remove(os.path.expanduser("~/Downloads/kitty-0.34.1-x86_64.txz"))
 
-    # Mover kitty a /opt
-    if os.path.exists("/opt/kitty"):
-        shutil.rmtree("/opt/kitty")
-    shutil.move(os.path.expanduser("~/Downloads/kitty"), "/opt/")
+    # Mover kitty a /opt con sudo
+    run_command(f"sudo mv {temp_dir}/* /opt/kitty/", "Moviendo kitty a /opt")
+    shutil.rmtree(temp_dir)
 
     print(f"{GREEN}[OK]{END} Instalación de kitty")
 
@@ -147,7 +147,8 @@ def install_kitty():
     print(f"{GREEN}[OK]{END} Configuración de sxhkd para kitty")
 
     # Configurar kitty
-    os.makedirs(os.path.expanduser("~/.config/kitty"), exist_ok=True)
+    kitty_config_dir = os.path.expanduser("~/.config/kitty")
+    os.makedirs(kitty_config_dir, exist_ok=True)
     kitty_config = """font_family HackNerdFont
 cursor_shape beam
 
@@ -174,14 +175,18 @@ tab_bar_margin_color #000000
 
 background_opacity 0.95
 """
-    with open(os.path.expanduser("~/.config/kitty/kitty.conf"), "w") as file:
+    with open(os.path.join(kitty_config_dir, "kitty.conf"), "w") as file:
         file.write(kitty_config)
     print(f"{GREEN}[OK]{END} Configuración de kitty")
 
+    # Crear un enlace simbólico en /usr/local/bin para kitty
+    run_command("sudo ln -sf /opt/kitty/bin/kitty /usr/local/bin/kitty", "Creando enlace simbólico para kitty")
+
     # Copiar configuración para root
-    os.makedirs("/root/.config/kitty", exist_ok=True)
-    shutil.copy(os.path.expanduser("~/.config/kitty/kitty.conf"), "/root/.config/kitty/")
-    print(f"{GREEN}[OK]{END} Copia de configuración de kitty para root")
+    run_command("sudo mkdir -p /root/.config/kitty", "Creando directorio de configuración para root")
+    run_command(f"sudo cp {kitty_config_dir}/kitty.conf /root/.config/kitty/", "Copiando configuración de kitty para root")
+
+    print(f"{GREEN}[OK]{END} Instalación y configuración de kitty completada")
 
 
 def install_zsh():
