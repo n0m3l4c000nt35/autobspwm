@@ -187,20 +187,20 @@ install_powerlevel10k() {
     
     expect <<EOF
     spawn zsh
-    expect "Prompt Style" { send "2\r" }
-    expect "Character Set" { send "1\r" }
-    expect "Prompt Color" { send "2\r" }
-    expect "Show current time?" { send "n\r" }
-    expect "Prompt Separators" { send "1\r" }
-    expect "Prompt Heads" { send "3\r" }
-    expect "Prompt Tails" { send "4\r" }
-    expect "Prompt Height" { send "1\r" }
-    expect "Prompt Spacing" { send "2\r" }
-    expect "Icons" { send "2\r" }
-    expect "Prompt Flow" { send "2\r" }
-    expect "Enable Transient Prompt?" { send "y\r" }
-    expect "Instant Prompt Mode" { send "1\r" }
-    expect "Apply changes to ~/.zshrc?" { send "y\r" }
+    expect "Prompt Style"; send "2\r"
+    expect "Character Set"; send "1\r"
+    expect "Prompt Color"; send "2\r"
+    expect "Show current time?", send "n\r"
+    expect "Prompt Separators"; send "1\r"
+    expect "Prompt Heads"; send "3\r"
+    expect "Prompt Tails"; send "4\r"
+    expect "Prompt Height"; send "1\r"
+    expect "Prompt Spacing"; send "2\r"
+    expect "Icons"; send "2\r"
+    expect "Prompt Flow"; send "2\r"
+    expect "Enable Transient Prompt?"; send "y\r"
+    expect "Instant Prompt Mode"; send "1\r"
+    expect "Apply changes to ~/.zshrc?"; send "y\r"
     expect eof
 EOF
     check_command "Configuración de Powerlevel10k"
