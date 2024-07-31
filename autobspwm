@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Función para verificar si un comando se ejecutó correctamen
+# Función para verificar si un comando se ejecutó correctamente
 check_command() {
     if [ $? -eq 0 ]; then
         echo "[OK] $1"
@@ -13,29 +13,25 @@ check_command() {
 install_bspwm() {
     echo "Instalando bspwm..."
     sudo apt install libxcb-xinerama0-dev libxcb-icccm4-dev libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev -y
-    check_command "Instalación de dependencias de bspwm
-w
-    cd ~/Downloads
-    git clone https://github.com/baskerville/bspwm.git
-    git clone https://github.com/baskerville/sxhkd.git
+    check_command "Instalación de dependencias de bspwm"
+    git clone https://github.com/baskerville/bspwm.git ~/Downloads
+    git clone https://github.com/baskerville/sxhkd.git ~/Downloads
     cd bspwm
-    make
-    sudo make install
-    check_command "Instalación de bspwm
-
+    ~/Downloads/bspwm/make
+    sudo ~/Downlaos/bspwm/make install
+    check_command "Instalación de bspwm"
     which bspwm
-    check_command "Verificación de la instalacón de pwn"
+    check_command "Verificación de la instalacón de bspwm"
 }
 
 install_sxhkd() {
     echo "Instalando sxhkd..."
     cd ~/Downloads/sxhkd
-    make
-    sudo make install
-    check_command "Instalación de sxhkd
-
+    ~/Downloads/sxhkd/make
+    sudo ~/Downloads/sxhkd/make install
+    check_command "Instalación de sxhkd"
     which sxhkd
-    check_command "Verificación de la instalación de sxhk
+    check_command "Verificación de la instalación sxhkd"
 }
 
 configure_bspwm_sxhkd() {
@@ -51,7 +47,7 @@ configure_bspwm_sxhkd() {
     sed -i 's/super + ctrl + {h,j,k,l}/super + ctrl + alt + {Left,Down,Up,Right}/g' ~/.config/sxhkd/sxhkdrc
     sed -i 's/super + alt + {h,j,k,l}/super + alt + shift + {Left,Down,Up,Right}/g' ~/.config/sxhkd/sxhkdrc
     echo -e "\n# custom resize\nsuper + alt + {Left,Down,Up,Right}\n    ~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}" >> ~/.config/sxhkd/sxhkdrc
-    check_command "Modificación de sxhkdrc"
+    check_command "Modificación de sxhkd"
 
     # Crear script bspwm_resize
     mkdir -p ~/.config/bspwm/scripts
@@ -87,9 +83,9 @@ EOF
 
 # Actualizar el sistema
 # sudo apt update && sudo apt upgrade -y
-# check_command "Actualización del sistema"
+# check_command "Actualización del sistema
 
-# Instalar dependencias básicas
+# Instalar dependencias básica
 sudo apt install git wget curl build-essential -y
 check_command "Instalación de dependencias básicas"
 
@@ -99,7 +95,6 @@ check_command "Creación de directorios de configuración"
 
 # Función principal
 main() {
-    # Aquí iremos añadiendo las funciones para cada paso
     echo "Comenzando la personalización del sistema..."
     install_bspwm
     install_sxhkd
