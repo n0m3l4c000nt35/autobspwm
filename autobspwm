@@ -89,6 +89,85 @@ EOF
     check_command "Atajo para Firefox añadido"
 }
 
+install_kitty() {
+    echo -e "\n${green}[+]${end} Instalando kitty...\n"
+    sudo mkdir -p /opt/kitty
+    wget -P ~/Downloads https://github.com/kovidgoyal/kitty/releases/download/v0.34.1/kitty-0.34.1-x86_64.txz
+    mkdir ~/Downloads/kitty
+    sudo tar -xf ~/Downloads/kitty-0.34.1-x86_64.txz -C ~/Downloads/kitty
+    sudo rm -rf ~/Downloads/kitty-0.34.1-x86_64.txz
+    sudo mv ~/Downloads/kitty/ /opt/
+    check_command "Instalación de kitty"
+
+    # Configurar sxhkd para usar kitty
+    sed -i 's|urxvt|/opt/kitty/bin/kitty|g' ~/.config/sxhkd/sxhkdrc
+    check_command "Configuración de sxhkd para kitty"
+
+    # Configurar kitty
+    mkdir -p ~/.config/kitty
+    cat << EOF > ~/.config/kitty/kitty.conf
+font_family HackNerdFont
+cursor_shape beam
+
+map ctrl+left neighboring_window left
+map ctrl+right neighboring_window right
+map ctrl+up neighboring_window up
+map ctrl+down neighboring_window down
+
+map ctrl+shift+enter new_window_with_cwd
+map ctrl+shift+t new_tab_with_cwd
+
+map f1 copy_to_buffer a
+map f2 paste_from_buffer a
+map f3 copy_to_buffer b
+map f4 paste_from_buffer b
+
+map ctrl+shift+z toggle_layout stack
+tab_bar_style powerline
+
+inactive_tab_background #e06c75
+active_tab_background #98c379
+inactive_tab_foreground #000000
+tab_bar_margin_color #000000
+
+background_opacity 0.95
+EOF
+    check_command "Configuración de kitty"
+
+    # Copiar configuración para root
+    sudo mkdir -p /root/.config/kitty
+    sudo cp ~/.config/kitty/* /root/.config/kitty
+    check_command "Copia de configuración de kitty para root"
+}
+
+install_zsh() {
+    echo -e "\n${green}[+]${end} Instalando zsh...\n"
+    sudo apt install zsh zsh-autosuggestions zsh-syntax-highlighting -y
+    check_command "Instalación de zsh y plugins"
+
+    sudo usermod --shell /usr/bin/zsh $USER
+    sudo usermod --shell /usr/bin/zsh root
+    check_command "Configuración de zsh como shell predeterminada"
+
+    # Agregar configuración a kitty
+    echo "shell zsh" >> ~/.config/kitty/kitty.conf
+    check_command "Configuración de kitty para usar zsh"
+}
+
+install_fonts() {
+    echo -e "\n${green}[+}${end} Instalando fuentes...\n"
+    sudo wget -P /usr/local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip
+    sudo unzip /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts
+    sudo rm -rf /usr/local/share/fonts/Hack.zip /usr/local/share/fonts/README.md /usr/local/share/fonts/LICENSE.md
+    check_command "Instalación de Hack Nerd Font"
+
+    git clone https://github.com/VaughnValle/blue-sky.git ~/Downloads
+    sudo cp blue-sky/polybar/fonts/* /usr/share/fonts/truetype
+    sudo fc-cache -v
+    rm -rf ~/Downloads/blue-sky
+    check_command "Instalación de fuentes adicionales"
+}
+
 # Actualizar el sistema
 # sudo apt update && sudo apt upgrade -y
 # check_command "Actualización del sistema
@@ -107,6 +186,9 @@ main() {
     install_bspwm
     install_sxhkd
     configure_bspwm_sxhkd
+    install_kitty
+    install_zsh
+    install_fonts
 }
 
 # Ejecutar la función principal
