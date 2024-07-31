@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Función para verificar si un comando se ejecutó correctamente
+check_command() {
+    if [ $? -eq 0 ]; then
+        echo "[OK] $1"
+    else
+        echo "[ERROR] $1"
+        exit 1
+    fi
+}
+
+# Actualizar el sistema
+# sudo apt update && sudo apt upgrade -y
+# check_command "Actualización del sistema"
+
+# Instalar dependencias básicas
+sudo apt install git wget curl build-essential -y
+check_command "Instalación de dependencias básicas"
+
+# Crear directorios necesarios
+mkdir -p ~/.config/{bspwm,sxhkd,kitty,picom,polybar}
+check_command "Creación de directorios de configuración"
+
+# Función principal
+main() {
+    # Aquí iremos añadiendo las funciones para cada paso
+    echo "Comenzando la personalización del sistema..."
+}
+
+# Ejecutar la función principal
+main
