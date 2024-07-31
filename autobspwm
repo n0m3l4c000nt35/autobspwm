@@ -177,6 +177,118 @@ install_fonts() {
     check_command "Instalación de fuentes adicionales"
 }
 
+install_powerlevel10k() {
+    echo -e "\n${green}[+]${end} Instalando powerlevel10k...\n"
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+    echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+    check_command "Instalación de powerlevel10k"
+
+    # Configurar powerlevel10k
+    sed -i '/POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=/,/)/c\
+  typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(\
+    os_icon                 # os identifier\
+    dir                     # current directory\
+    vcs                     # git status\
+    command_execution_time\
+    context\
+    status\
+    # prompt_char           # prompt symbol\
+  )' ~/.p10k.zsh
+
+        # Modificar RIGHT_PROMPT_ELEMENTS
+    sed -i '/POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=/,/)/c\
+  typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(\
+    # status                  # exit code of the last command\
+    # command_execution_time  # duration of the last command\
+    # background_jobs         # presence of background jobs\
+    # direnv                  # direnv status (https://direnv.net/)\
+    # asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)\
+    virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)\
+    # anaconda                # conda environment (https://conda.io/)\
+    pyenv                   # python environment (https://github.com/pyenv/pyenv)\
+    # goenv                   # go environment (https://github.com/syndbg/goenv)\
+    # nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)\
+    # nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)\
+    # nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)\
+    # rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)\
+    # rvm                     # ruby version from rvm (https://rvm.io)\
+    # fvm                     # flutter version management (https://github.com/leoafarias/fvm)\
+    # luaenv                  # lua version from luaenv (https://github.com/cehoffman/luaenv)\
+    # jenv                    # java version from jenv (https://github.com/jenv/jenv)\
+    # plenv                   # perl version from plenv (https://github.com/tokuhirom/plenv)\
+    # perlbrew                # perl version from perlbrew (https://github.com/gugod/App-perlbrew)\
+    # phpenv                  # php version from phpenv (https://github.com/phpenv/phpenv)\
+    # scalaenv                # scala version from scalaenv (https://github.com/scalaenv/scalaenv)\
+    # haskell_stack           # haskell version from stack (https://haskellstack.org/)\
+    # kubecontext             # current kubernetes context (https://kubernetes.io/)\
+    # terraform               # terraform workspace (https://www.terraform.io)\
+    # aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)\
+    # aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)\
+    # azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)\
+    # gcloud                  # google cloud cli account and project (https://cloud.google.com/)\
+    # google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)\
+    # toolbox                 # toolbox name (https://github.com/containers/toolbox)\
+    # context                 # user@hostname\
+    # nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)\
+    # ranger                  # ranger shell (https://github.com/ranger/ranger)\
+    # yazi                    # yazi shell (https://github.com/sxyazi/yazi)\
+    # nnn                     # nnn shell (https://github.com/jarun/nnn)\
+    # lf                      # lf shell (https://github.com/gokcehan/lf)\
+    # xplr                    # xplr shell (https://github.com/sayanarijit/xplr)\
+    # vim_shell               # vim shell indicator (:sh)\
+    # midnight_commander      # midnight commander shell (https://midnight-commander.org/)\
+    # nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)\
+    # chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)\
+    # todo                    # todo items (https://github.com/todotxt/todo.txt-cli)\
+    # timewarrior             # timewarrior tracking status (https://timewarrior.net/)\
+    # taskwarrior             # taskwarrior task count (https://taskwarrior.org/)\
+    # per_directory_history   # Oh My Zsh per-directory-history local/global indicator\
+  )' ~/.p10k.zsh
+
+    # Añadir o modificar otras configuraciones
+    sed -i 's/POWERLEVEL9K_DIR_ANCHOR_BOLD=true/POWERLEVEL9K_DIR_ANCHOR_BOLD=false/' ~/.p10k.zsh
+
+    check_command "Configuración básica de powerlevel10k"
+
+    # Configurar zsh
+    cat << EOF >> ~/.zshrc
+# Fix Java issue
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# ZSH AutoSuggestions Plugin
+if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# ZSH Syntax Highlighting Plugin
+if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt histignorealldups sharehistory
+
+# Custom Aliases
+# bat
+alias cat='bat'
+alias catn='bat --style=plain'
+alias catnp='bat --style=plain --paging=never'
+
+# ls
+alias ll='lsd -lh --group-dirs=first'
+alias la='lsd -a --group-dirs=first'
+alias l='lsd --group-dirs=first'
+alias lla='lsd -lha --group-dirs=first'
+alias ls='lsd --group-dirs=first'
+
+xset r rate 250 25
+EOF
+    check_command "Configuración adicional de zsh"
+}
+
 # Actualizar el sistema
 # sudo apt update && sudo apt upgrade -y
 # check_command "Actualización del sistema
@@ -198,6 +310,7 @@ main() {
     install_kitty
     install_zsh
     install_fonts
+    install_powerlevel10k
 }
 
 # Ejecutar la función principal
