@@ -20,7 +20,7 @@ check_command() {
 }
 
 install_bspwm() {
-    echo -e "\n${green}[+]${end} Instalando bspwm...\n"
+    echo -e "\n${yellow}[+]${end} Instalando bspwm...\n"
     sudo apt install libxcb-xinerama0-dev libxcb-icccm4-dev libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev -y
     check_command "Instalación de dependencias de bspwm"
     git clone https://github.com/baskerville/bspwm.git ~/Downloads/bspwm
@@ -33,7 +33,7 @@ install_bspwm() {
 }
 
 install_sxhkd() {
-    echo -e "\n${green}[+]${end} Instalando sxhkd...\n"
+    echo -e "\n${yellow}[+]${end} Instalando sxhkd...\n"
     cd ~/Downloads/sxhkd
     sudo make -C ~/Downloads/sxhkd
     sudo make -C ~/Downloads/sxhkd install
@@ -43,7 +43,7 @@ install_sxhkd() {
 }
 
 configure_bspwm_sxhkd() {
-    echo -e "\n${green}[+]${end} Configurando bspwm y sxhkd...\n"
+    echo -e "\n${yellow}[+]${end} Configurando bspwm y sxhkd...\n"
     cp ~/Downloads/bspwm/examples/bspwmrc ~/.config/bspwm/
     chmod +x ~/.config/bspwm/bspwmrc
     sudo apt install bspwm -y
@@ -99,7 +99,7 @@ EOF
 }
 
 install_kitty() {
-    echo -e "\n${green}[+]${end} Instalando kitty...\n"
+    echo -e "\n${yellow}[+]${end} Instalando kitty...\n"
     sudo mkdir -p /opt/kitty
     wget -P ~/Downloads https://github.com/kovidgoyal/kitty/releases/download/v0.34.1/kitty-0.34.1-x86_64.txz
     mkdir ~/Downloads/kitty
@@ -150,7 +150,7 @@ EOF
 }
 
 install_zsh() {
-    echo -e "\n${green}[+]${end} Instalando zsh...\n"
+    echo -e "\n${yellow}[+]${end} Instalando zsh...\n"
     sudo apt install zsh zsh-autosuggestions zsh-syntax-highlighting -y
     check_command "Instalación de zsh y plugins"
 
@@ -164,7 +164,7 @@ install_zsh() {
 }
 
 install_fonts() {
-    echo -e "\n${green}[+}${end} Instalando fuentes...\n"
+    echo -e "\n${yellow}[+}${end} Instalando fuentes...\n"
     sudo wget -P /usr/local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip
     sudo unzip /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts
     sudo rm -rf /usr/local/share/fonts/Hack.zip /usr/local/share/fonts/README.md /usr/local/share/fonts/LICENSE.md
@@ -178,10 +178,14 @@ install_fonts() {
 }
 
 install_powerlevel10k() {
-    echo -e "\n${green}[+]${end} Instalando powerlevel10k...\n"
+    echo -e "\n${yellow}[+]${end} Instalando powerlevel10k...\n"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
     echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
     check_command "Instalación de powerlevel10k"
+
+    # Copiar el archivo de configuración clásico
+    cp ~/powerlevel10k/config/p10k-classic.zsh ~/.p10k.zsh
+    check_command "Copia del archivo de configuración p10k-classic.zsh"
 
     # Configurar powerlevel10k
     sed -i '/POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=/,/)/c\
@@ -303,7 +307,7 @@ check_command "Creación de directorios de configuración"
 
 # Función principal
 main() {
-    echo -e "\n${green}[+]${end} Comenzando la personalización del sistema..."
+    echo -e "\n${yellow}[+]${end} Comenzando la personalización del sistema..."
     install_bspwm
     install_sxhkd
     configure_bspwm_sxhkd
