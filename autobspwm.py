@@ -40,6 +40,10 @@ def install_sxhkd():
 def configure_bspwm_sxhkd():
     print(f"\n{YELLOW}[+]{END} Configurando bspwm y sxhkd...")
 
+    # Crear directorios necesarios
+    os.makedirs(os.path.expanduser("~/.config/bspwm"), exist_ok=True)
+    os.makedirs(os.path.expanduser("~/.config/sxhkd"), exist_ok=True)
+
     # Copiar archivos de configuración
     run_command("cp ~/Downloads/bspwm/examples/bspwmrc ~/.config/bspwm/", "Copiando bspwmrc")
     run_command("chmod +x ~/.config/bspwm/bspwmrc", "Haciendo ejecutable bspwmrc")
