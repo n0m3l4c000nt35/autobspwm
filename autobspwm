@@ -185,79 +185,25 @@ install_powerlevel10k() {
 
     echo -e "\n${yellow}[+]${end} Configurando Powerlevel10k...\n"
     
-    # Crear un script expect para la configuración interactiva
-    cat << 'EOF' > /tmp/p10k_config.exp
-#!/usr/bin/expect -f
-
-set timeout -1
-
-spawn zsh -c "source ~/powerlevel10k/powerlevel10k.zsh-theme && p10k configure"
-
-expect "Does this look like a diamond (rotated square)?"
-send "y\r"
-
-expect "Does this look like a lock?"
-send "y\r"
-
-expect "Does this look like a Debian logo (swirl/spiral)?"
-send "y\r"
-
-expect "Do all these icons fit between the crosses?"
-send "y\r"
-
-expect "Prompt Style"
-send "2\r"
-
-expect "Character Set"
-send "1\r"
-
-expect "Prompt Color"
-send "2\r"
-
-expect "Show current time?"
-send "n\r"
-
-expect "Prompt Separators"
-send "1\r"
-
-expect "Prompt Heads"
-send "3\r"
-
-expect "Prompt Tails"
-send "4\r"
-
-expect "Prompt Height"
-send "1\r"
-
-expect "Prompt Spacing"
-send "2\r"
-
-expect "Icons"
-send "2\r"
-
-expect "Prompt Flow"
-send "2\r"
-
-expect "Enable Transient Prompt?"
-send "y\r"
-
-expect "Instant Prompt Mode"
-send "1\r"
-
-expect "Apply changes to ~/.zshrc?"
-send "y\r"
-
-expect eof
+    expect <<EOF
+    spawn zsh
+    expect "Prompt Style" { send "2\r" }
+    expect "Character Set" { send "1\r" }
+    expect "Prompt Color" { send "2\r" }
+    expect "Show current time?" { send "n\r" }
+    expect "Prompt Separators" { send "1\r" }
+    expect "Prompt Heads" { send "3\r" }
+    expect "Prompt Tails" { send "4\r" }
+    expect "Prompt Height" { send "1\r" }
+    expect "Prompt Spacing" { send "2\r" }
+    expect "Icons" { send "2\r" }
+    expect "Prompt Flow" { send "2\r" }
+    expect "Enable Transient Prompt?" { send "y\r" }
+    expect "Instant Prompt Mode" { send "1\r" }
+    expect "Apply changes to ~/.zshrc?" { send "y\r" }
+    expect eof
 EOF
-
-    # Ejecutar el script expect
-    expect /tmp/p10k_config.exp
-
-    # Eliminar el script temporal
-    rm /tmp/p10k_config.exp
-
     check_command "Configuración de Powerlevel10k"
-
     echo -e "\n${green}[✓]${end} Powerlevel10k ha sido instalado y configurado.\n"
 }
 
