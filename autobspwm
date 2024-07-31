@@ -25,9 +25,8 @@ install_bspwm() {
     check_command "Instalación de dependencias de bspwm"
     git clone https://github.com/baskerville/bspwm.git ~/Downloads/bspwm
     git clone https://github.com/baskerville/sxhkd.git ~/Downloads/sxhkd
-    cd bspwm
-    sudo -C ~/Downloads/bspwm
-    sudo -C ~/Downloads/bspwm install
+    sudo make -C ~/Downloads/bspwm
+    sudo make -C ~/Downloads/bspwm install
     check_command "Instalación de bspwm"
     which bspwm
     check_command "Verificación de la instalación de bspwm"
@@ -36,8 +35,8 @@ install_bspwm() {
 install_sxhkd() {
     echo -e "\n${green}[+]${end} Instalando sxhkd...\n"
     cd ~/Downloads/sxhkd
-    sudo -C ~/Downloads/sxhkd
-    sudo -C ~/Downloads/sxhkd install
+    sudo make -C ~/Downloads/sxhkd
+    sudo make -C ~/Downloads/sxhkd install
     check_command "Instalación de sxhkd"
     which sxhkd
     check_command "Verificación de la instalación sxhkd"
@@ -46,7 +45,7 @@ install_sxhkd() {
 configure_bspwm_sxhkd() {
     echo -e "\n${green}[+]${end} Configurando bspwm y sxhkd...\n"
     cp ~/Downloads/bspwm/examples/bspwmrc ~/.config/bspwm/
-    chmod u+x ~/.config/bspwm/bspwmrc
+    chmod +x ~/.config/bspwm/bspwmrc
     sudo apt install bspwm -y
     cp ~/Downloads/bspwm/examples/sxhkdrc ~/.config/sxhkd/
     check_command "Configuración inicial de bspwm y sxhkd"
