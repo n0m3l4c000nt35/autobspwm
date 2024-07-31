@@ -26,8 +26,8 @@ install_bspwm() {
     git clone https://github.com/baskerville/bspwm.git ~/Downloads/bspwm
     git clone https://github.com/baskerville/sxhkd.git ~/Downloads/sxhkd
     cd bspwm
-    ~/Downloads/bspwm/make
-    sudo ~/Downloads/bspwm/make install
+    sudo -C ~/Downloads/bspwm
+    sudo -C ~/Downloads/bspwm install
     check_command "Instalación de bspwm"
     which bspwm
     check_command "Verificación de la instalación de bspwm"
@@ -36,8 +36,8 @@ install_bspwm() {
 install_sxhkd() {
     echo -e "\n${green}[+]${end} Instalando sxhkd...\n"
     cd ~/Downloads/sxhkd
-    ~/Downloads/sxhkd/make
-    sudo ~/Downloads/sxhkd/make install
+    sudo -C ~/Downloads/sxhkd
+    sudo -C ~/Downloads/sxhkd install
     check_command "Instalación de sxhkd"
     which sxhkd
     check_command "Verificación de la instalación sxhkd"
