@@ -212,6 +212,275 @@ EOF
     echo -e "\n${green}[✓]${end} Powerlevel10k ha sido instalado y configurado.\n"
 }
 
+install_picom() {
+    echo -e "\n${yellow}[+]${end} Instalando picom...\n"
+    sudo apt install libconfig-dev libdbus-1-dev libegl-dev libev-dev libgl-dev libepoxy-dev libpcre2-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev -y
+    check_command "Instalación de dependencias de picom"
+
+    git clone https://github.com/yshui/picom ~/Downloads/picom
+    cd ~/Downloads/picom
+    meson setup --buildtype=release build
+    ninja -C build
+    sudo ninja -C build install
+    cd ~
+    rm -rf ~/Downloads/picom
+    check_command "Instalación de picom"
+
+    which picom
+    check_command "Verificación de la instalación de picom"
+
+    mkdir -p ~/.config/picom
+    wget -O ~/.config/picom/picom.conf https://raw.githubusercontent.com/yshui/picom/next/picom.sample.conf
+    check_command "Configuración de picom"
+
+    echo "picom &" >> ~/.config/bspwm/bspwmrc
+    check_command "Agregado de picom al inicio de bspwm"
+}
+
+install_bat_and_lsd() {
+    echo -e "\n${yellow}[+]${end} Instalando bat y lsd...\n"
+    wget -P ~/Downloads https://github.com/sharkdp/bat/releases/download/v0.24.0/bat_0.24.0_amd64.deb
+    wget -P ~/Downloads https://github.com/lsd-rs/lsd/releases/download/v1.1.2/lsd_1.1.2_amd64.deb
+    sudo dpkg -i ~/Downloads/bat_0.24.0_amd64.deb
+    sudo dpkg -i ~/Downloads/lsd_1.1.2_amd64.deb
+    rm ~/Downloads/bat_0.24.0_amd64.deb ~/Downloads/lsd_1.1.2_amd64.deb
+    check_command "Instalación de bat y lsd"
+}
+
+install_feh() {
+    echo -e "\n${yellow}[+]${end} Instalando feh...\n"
+    sudo apt install feh -y
+    check_command "Instalación de feh"
+
+    echo '/usr/bin/feh --bg-center ~/Pictures/cambiaestoporfavor.png' >> ~/.config/bspwm/bspwmrc
+    check_command "Configuración de feh en bspwm"
+}
+
+install_polybar() {
+    echo -e "\n${yellow}[+]${end} Instalando polybar...\n"
+    sudo apt install polybar -y
+    check_command "Instalación de polybar"
+
+    echo '~/.config/polybar/./launch.sh &' >> ~/.config/bspwm/bspwmrc
+    check_command "Configuración de polybar en bspwm"
+
+    mkdir -p ~/.config/polybar
+    cat << EOF > ~/.config/polybar/launch.sh
+#!/bin/bash
+
+killall -q polybar
+
+polybar main -c ~/.config/polybar/config.ini
+EOF
+    chmod +x ~/.config/polybar/launch.sh
+    check_command "Creación del script de inicio de polybar"
+
+    mkdir -p ~/.config/bspwm/scripts
+    for script in ethernet_status.sh vpn_status.sh target_to_hack.sh; do
+        touch ~/.config/bspwm/scripts/$script
+        chmod +x ~/.config/bspwm/scripts/$script
+    done
+    check_command "Creación de scripts para polybar"
+
+    # Contenido de los scripts
+    echo '#!/bin/bash
+
+echo " %{F#fff}$(/usr/sbin/ifconfig ens33 | grep "inet " | awk '\''{print $2}'\'')"' > ~/.config/bspwm/scripts/ethernet_status.sh
+
+    echo '#!/bin/bash
+
+IFACE=$(/usr/sbin/ifconfig | grep tun0 | awk '\''{print $1}'\'' | tr -d '\'':'\')
+
+if [ "$IFACE" = "tun0" ]; then
+    echo " %{F#fff}$(/usr/sbin/ifconfig tun0 | grep "inet " | awk '\''{print $2}'\'')"
+else
+  echo " %{F#fff}Disconnected"
+fi' > ~/.config/bspwm/scripts/vpn_status.sh
+
+    echo '#!/bin/bash
+
+ip_address=$(/bin/cat ~/.config/bin/target | awk '\''{print $1}'\'')
+machine_name=$(/bin/cat ~/.config/bin/target | awk '\''{print $2}'\'')
+
+if [ $ip_address ] && [ $machine_name ]; then
+    echo "%{F#fff}$ip_address%{u-} - $machine_name"
+else
+    echo "%{u-}%{F#fff} No target"
+fi' > ~/.config/bspwm/scripts/target_to_hack.sh
+
+    check_command "Configuración de scripts para polybar"
+
+    mkdir -p ~/.config/bin
+    touch ~/.config/bin/target
+    check_command "Creación del archivo target"
+
+    # Configuración de polybar
+    cat << EOF > ~/.config/polybar/config.ini
+[bar/main]
+width = 98%
+height = 40
+offset-x = 1%
+offset-y = 1%
+margin-bottom = 0
+background = #00000000
+module-margin = 5pt
+modules-left = ethernet_status vpn_status
+modules-center = workspaces
+modules-right = target_to_hack
+padding = 20px
+font-0 = "Hack Nerd Font Mono:style=regular:size=10;1"
+font-1 = "Hack Nerd Font Mono:style=regular:size=16;2"
+font-2 = "Hack Nerd Font Mono:style=regular:size=18;2"
+font-3 = "Hack Nerd Font Mono:style=regular:size=20;4"
+
+[module/ethernet_status]
+type = custom/script
+exec = ~/.config/bspwm/scripts/ethernet_status.sh
+interval = 2
+format-prefix = "󰈀"
+format-prefix-foreground = #2494e7
+format-prefix-font = 2
+
+[module/vpn_status]
+type = custom/script
+exec = ~/.config/bspwm/scripts/vpn_status.sh
+interval = 2
+format-prefix = "󰆧"
+format-prefix-foreground = #1bbf3e
+format-prefix-font = 2
+
+[module/workspaces]
+type = internal/xworkspaces
+icon-default = 
+format = <label-state>
+format-font = 3
+label-active = 󱓇
+label-active-foreground = #1bbf3e
+label-active-padding = 5px
+label-active-font = 4
+label-occupied = %icon%
+label-occupied-foreground = #ffff00
+label-occupied-padding = 5px
+label-occupied-font = 2
+label-urgent = %icon%
+label-urgent-foreground = #e51d0b
+label-urgent-padding = 5px
+label-empty = %icon%
+label-empty-foreground = #a1a1a1
+label-empty-padding = 5px
+label-empty-font = 2
+
+[module/target_to_hack]
+type = custom/script
+exec = ~/.config/bspwm/scripts/target_to_hack.sh
+interval = 2
+format-prefix = "󰓾"
+format-prefix-foreground = #e51d0b
+format-prefix-font = 2
+EOF
+    check_command "Configuración de polybar"
+}
+
+install_imagemagick() {
+    echo -e "\n${yellow}[+]${end} Instalando imagemagick...\n"
+    sudo apt install imagemagick -y
+    check_command "Instalación de imagemagick"
+
+    echo "wmname LG3D &" >> ~/.config/bspwm/bspwmrc
+    check_command "Configuración para aplicaciones JAVA en bspwm"
+}
+
+install_nvim_nvchad() {
+    echo -e "\n${yellow}[+]${end} Instalando nvim y nvchad...\n"
+    git clone https://github.com/NvChad/starter ~/.config/nvim
+    wget -P ~/Downloads https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
+    sudo mkdir /opt/nvim
+    sudo mv ~/Downloads/nvim-linux64.tar.gz /opt/nvim
+    sudo tar -xf /opt/nvim/nvim-linux64.tar.gz -C /opt/nvim
+    sudo rm /opt/nvim/nvim-linux64.tar.gz
+    check_command "Instalación de nvim"
+
+    echo 'export PATH=/opt/nvim/nvim-linux64/bin:$PATH' >> ~/.zshrc
+    source ~/.zshrc
+    check_command "Configuración del PATH para nvim"
+
+    nvim --headless -c 'quitall'
+    check_command "Inicialización de nvim"
+
+    echo "vim.opt.listchars = \"tab:»·,trail:·\"" >> ~/.config/nvim/init.lua
+    sed -i '/theme = "onedark",/a\  transparency = true,' ~/.config/nvim/lua/chadrc.lua
+    check_command "Configuración adicional de nvim"
+
+    nvim --headless -c 'MasonInstallAll' -c 'quitall'
+    check_command "Instalación de paquetes de Mason para nvim"
+
+    sudo mkdir -p /root/.config/nvim
+    sudo cp -r ~/.config/nvim/* /root/.config/nvim
+    check_command "Configuración de nvim para root"
+}
+
+install_fzf() {
+    echo -e "\n${yellow}[+]${end} Instalando fzf...\n"
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install --all
+    check_command "Instalación de fzf para usuario"
+
+    sudo git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf
+    sudo /root/.fzf/install --all
+    check_command "Instalación de fzf para root"
+}
+
+install_i3lock() {
+    echo -e "\n${yellow}[+]${end} Instalando i3lock...\n"
+    sudo apt install i3lock -y
+    check_command "Instalación de i3lock"
+
+    sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy
+    cd /opt/i3lock-fancy
+    sudo make install
+    cd ~
+    check_command "Instalación de i3lock-fancy"
+}
+
+install_locate() {
+    echo -e "\n${yellow}[+]${end} Instalando locate...\n"
+    sudo apt install locate -y
+    sudo updatedb
+    check_command "Instalación y actualización de locate"
+
+    echo 'export PATH=/usr/sbin:$PATH' >> ~/.zshrc
+    source ~/.zshrc
+    check_command "Configuración del PATH para locate"
+}
+
+install_rofi() {
+    echo -e "\n${yellow}[+]${end} Instalando rofi...\n"
+    sudo apt install rofi -y
+    check_command "Instalación de rofi"
+
+    mkdir -p ~/.config/rofi/themes
+    sudo git clone https://github.com/newmanls/rofi-themes-collection /opt/rofi-themes-collection
+    sudo cp /opt/rofi-themes-collection/themes/* ~/.config/rofi/themes/
+    check_command "Configuración de temas para rofi"
+
+    sed -i 's/dmenu_run/\/usr\/bin\/rofi -show run/' ~/.config/sxhkd/sxhkdrc
+    check_command "Configuración de atajo de teclado para rofi"
+}
+
+setup_burpsuite_launcher() {
+    echo -e "\n${yellow}[+]${end} Configurando Burpsuite launcher...\n"
+    sudo tee /usr/bin/burpsuite-launcher > /dev/null << EOF
+#!/bin/bash
+
+export _JAVA_AWT_WM_NONREPARENTING=1
+wmname LG3D &
+
+/usr/bin/burpsuite
+EOF
+    sudo chmod +x /usr/bin/burpsuite-launcher
+    check_command "Creación del launcher de Burpsuite"
+}
+
 # Actualizar el sistema
 # sudo apt update && sudo apt upgrade -y
 # check_command "Actualización del sistema
@@ -234,6 +503,17 @@ main() {
     install_zsh
     install_fonts
     install_powerlevel10k
+    install_picom
+    install_bat_and_lsd
+    install_feh
+    install_polybar
+    install_imagemagick
+    install_nvim_nvchad
+    install_fzf
+    install_i3lock
+    install_locate
+    install_rofi
+    setup_burpsuite_launcher
 }
 
 # Ejecutar la función principal
