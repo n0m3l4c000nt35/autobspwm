@@ -164,74 +164,62 @@ install_polybar() {
 
 install_imagemagick() {
     echo -e "\n${yellow}[+]${end} Instalando imagemagick...\n"
-    sudo apt install imagemagick -y
-    check_command "Instalación de imagemagick"
 
-    echo "wmname LG3D &" >> ~/.config/bspwm/bspwmrc
-    check_command "Configuración para aplicaciones JAVA en bspwm"
+    sudo apt install imagemagick -y
+
+    check_command "Verificación de la instalación de imagemagick"
 }
 
 install_nvim_nvchad() {
     echo -e "\n${yellow}[+]${end} Instalando nvim y nvchad...\n"
+
     git clone https://github.com/NvChad/starter ~/.config/nvim
     wget -P ~/Downloads https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
     sudo mkdir /opt/nvim
     sudo mv ~/Downloads/nvim-linux64.tar.gz /opt/nvim
     sudo tar -xf /opt/nvim/nvim-linux64.tar.gz -C /opt/nvim
     sudo rm /opt/nvim/nvim-linux64.tar.gz
-    check_command "Instalación de nvim"
-
     echo 'export PATH=/opt/nvim/nvim-linux64/bin:$PATH' >> ~/.zshrc
     source ~/.zshrc
-    check_command "Configuración del PATH para nvim"
-
     nvim --headless -c 'quitall'
-    check_command "Inicialización de nvim"
-
     echo "vim.opt.listchars = \"tab:»·,trail:·\"" >> ~/.config/nvim/init.lua
     sed -i '/theme = "onedark",/a\  transparency = true,' ~/.config/nvim/lua/chadrc.lua
-    check_command "Configuración adicional de nvim"
-
     nvim --headless -c 'MasonInstallAll' -c 'quitall'
-    check_command "Instalación de paquetes de Mason para nvim"
-
     sudo mkdir -p /root/.config/nvim
     sudo cp -r ~/.config/nvim/* /root/.config/nvim
-    check_command "Configuración de nvim para root"
+
+    check_command "Verificación de la instalación de nvim"
 }
 
 install_fzf() {
     echo -e "\n${yellow}[+]${end} Instalando fzf...\n"
+
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install --all
-    check_command "Instalación de fzf para usuario"
-
     sudo git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf
     sudo /root/.fzf/install --all
-    check_command "Instalación de fzf para root"
+
+    check_command "Verificación de la instalación de fzf"
 }
 
 install_i3lock() {
     echo -e "\n${yellow}[+]${end} Instalando i3lock...\n"
-    sudo apt install i3lock -y
-    check_command "Instalación de i3lock"
 
+    sudo apt install i3lock -y
     sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy
     cd /opt/i3lock-fancy
     sudo make install
-    cd ~
-    check_command "Instalación de i3lock-fancy"
+
+    check_command "Verificación de la instalación de i3lock-fancy"
 }
 
 install_locate() {
     echo -e "\n${yellow}[+]${end} Instalando locate...\n"
+
     sudo apt install locate -y
     sudo updatedb
-    check_command "Instalación y actualización de locate"
-
-    echo 'export PATH=/usr/sbin:$PATH' >> ~/.zshrc
-    source ~/.zshrc
-    check_command "Configuración del PATH para locate"
+    
+    check_command "Verificación de la instalación de locate"
 }
 
 # Instalar dependencias básicas
@@ -261,8 +249,6 @@ main() {
     # install_fzf
     # install_i3lock
     # install_locate
-    # install_rofi
-    # setup_burpsuite_launcher
 }
 
 main
