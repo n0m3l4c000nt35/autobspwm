@@ -44,7 +44,7 @@ install_sxhkd() {
 
 configure_bspwm_sxhkd() {
     echo -e "\n${yellow}[+]${end} Configurando bspwm y sxhkd...\n"
-    cp ~/Downloads/bspwm/examples/bspwmrc ~/.config/bspwm/
+    wget -P ~/.config/bspwm/ https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/bspwmrc
     chmod +x ~/.config/bspwm/bspwmrc
     sudo apt install bspwm -y
     cp ~/Downloads/bspwm/examples/sxhkdrc ~/.config/sxhkd/
@@ -52,6 +52,7 @@ configure_bspwm_sxhkd() {
 
     # Crear script bspwm_resize
     mkdir -p ~/.config/bspwm/scripts
+    wget -P ~/.config/bspwm/scripts https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/bspwmrc
     chmod +x ~/.config/bspwm/scripts/bspwm_resize
     check_command "Creación del script bspwm_resize"
 
