@@ -72,7 +72,7 @@ setopt histignorealldups sharehistory
 
 xset r rate 250 25
 
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+source /home/user/powerlevel10k/powerlevel10k.zsh-theme
 
 export PATH=/usr/sbin/john:$PATH
 
