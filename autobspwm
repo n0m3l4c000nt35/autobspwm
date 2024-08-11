@@ -149,7 +149,7 @@ install_polybar() {
     echo -e "\n${yellow}[+]${end} Instalando polybar...\n"
 
     sudo apt install polybar -y
-    wget -P ~/.config/polybar https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/launch.sh
+    wget -O ~/.config/polybar/launch.sh https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/launch.sh
     wget -P ~/.config/polybar https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/config.ini
     chmod +x ~/.config/polybar/launch.sh
     for script in ethernet_status.sh vpn_status.sh target_to_hack.sh; do
