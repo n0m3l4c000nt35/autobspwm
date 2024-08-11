@@ -152,8 +152,7 @@ install_polybar() {
     wget -P ~/.config/polybar https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/launch.sh
     chmod +x ~/.config/polybar/launch.sh
     for script in ethernet_status.sh vpn_status.sh target_to_hack.sh; do
-        wget -P ~/.config/bspwm/scripts/$script https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/$script
-        touch ~/.config/bspwm/scripts/$script
+        wget -P ~/.config/bspwm/scripts/ https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/$script
         chmod +x ~/.config/bspwm/scripts/$script
     done
     interface=$(/usr/sbin/ifconfig 2>/dev/null | grep -o '^[a-zA-Z0-9]\+' | grep -v '^lo$') || interface=$(ip -o -4 route show to default | awk '{print $5}'); sed -i "s/interface/$interface/" ethernet_status.sh
