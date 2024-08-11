@@ -76,16 +76,12 @@ install_kitty() {
 
 install_zsh() {
     echo -e "\n${yellow}[+]${end} Instalando zsh...\n"
-    sudo apt install zsh zsh-autosuggestions zsh-syntax-highlighting -y
-    check_command "Instalación de zsh y plugins"
 
+    sudo apt install zsh-autosuggestions zsh-syntax-highlighting zsh-autocomplete -y
     sudo usermod --shell /usr/bin/zsh $USER
     sudo usermod --shell /usr/bin/zsh root
-    check_command "Configuración de zsh como shell predeterminada"
 
-    # Agregar configuración a kitty
-    echo "shell zsh" >> ~/.config/kitty/kitty.conf
-    check_command "Configuración de kitty para usar zsh"
+    check_command "Verificación de la instalación de zsh"
 }
 
 install_fonts() {
@@ -421,7 +417,7 @@ main() {
     install_sxhkd
     configure_bspwm_sxhkd
     install_kitty
-    # install_zsh
+    install_zsh
     # install_fonts
     # install_powerlevel10k
     # install_picom
