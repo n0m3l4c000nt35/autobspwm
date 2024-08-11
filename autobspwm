@@ -70,33 +70,33 @@ install_kitty() {
 
     # Configurar kitty
     mkdir -p ~/.config/kitty
-    cat << EOF > ~/.config/kitty/kitty.conf
-font_family HackNerdFont
-cursor_shape beam
+#     cat << EOF > ~/.config/kitty/kitty.conf
+# font_family HackNerdFont
+# cursor_shape beam
 
-map ctrl+left neighboring_window left
-map ctrl+right neighboring_window right
-map ctrl+up neighboring_window up
-map ctrl+down neighboring_window down
+# map ctrl+left neighboring_window left
+# map ctrl+right neighboring_window right
+# map ctrl+up neighboring_window up
+# map ctrl+down neighboring_window down
 
-map ctrl+shift+enter new_window_with_cwd
-map ctrl+shift+t new_tab_with_cwd
+# map ctrl+shift+enter new_window_with_cwd
+# map ctrl+shift+t new_tab_with_cwd
 
-map f1 copy_to_buffer a
-map f2 paste_from_buffer a
-map f3 copy_to_buffer b
-map f4 paste_from_buffer b
+# map f1 copy_to_buffer a
+# map f2 paste_from_buffer a
+# map f3 copy_to_buffer b
+# map f4 paste_from_buffer b
 
-map ctrl+shift+z toggle_layout stack
-tab_bar_style powerline
+# map ctrl+shift+z toggle_layout stack
+# tab_bar_style powerline
 
-inactive_tab_background #e06c75
-active_tab_background #98c379
-inactive_tab_foreground #000000
-tab_bar_margin_color #000000
+# inactive_tab_background #e06c75
+# active_tab_background #98c379
+# inactive_tab_foreground #000000
+# tab_bar_margin_color #000000
 
-background_opacity 0.95
-EOF
+# background_opacity 0.95
+# EOF
     check_command "Configuración de kitty"
 
     # Copiar configuración para root
@@ -141,29 +141,29 @@ install_powerlevel10k() {
 
     echo -e "\n${yellow}[+]${end} Configurando Powerlevel10k...\n"
     
-    expect <<EOF
-    spawn zsh
-    expect "Does this look like a diamond (rotated square)?"; send "y"
-    expect "Does this look like a lock?"; send "y"
-    expect "Does this look like an upwards arrow?"; send "y"
-    expect "What digit is the downwards arrow pointing at?"; send "1"
-    expect "Do all these icons fit between the crosses?"; send "y"
-    expect "Prompt Style"; send "2"
-    expect "Character Set"; send "1"
-    expect "Prompt Color"; send "2"
-    expect "Show current time?"; send "n"
-    expect "Prompt Separators"; send "1"
-    expect "Prompt Heads"; send "3"
-    expect "Prompt Tails"; send "4"
-    expect "Prompt Height"; send "1"
-    expect "Prompt Spacing"; send "2"
-    expect "Icons"; send "2"
-    expect "Prompt Flow"; send "2"
-    expect "Enable Transient Prompt?"; send "y"
-    expect "Instant Prompt Mode"; send "1"
-    expect "Apply changes to ~/.zshrc?"; send "y"
-    expect eof
-EOF
+#     expect <<EOF
+#     spawn zsh
+#     expect "Does this look like a diamond (rotated square)?"; send "y"
+#     expect "Does this look like a lock?"; send "y"
+#     expect "Does this look like an upwards arrow?"; send "y"
+#     expect "What digit is the downwards arrow pointing at?"; send "1"
+#     expect "Do all these icons fit between the crosses?"; send "y"
+#     expect "Prompt Style"; send "2"
+#     expect "Character Set"; send "1"
+#     expect "Prompt Color"; send "2"
+#     expect "Show current time?"; send "n"
+#     expect "Prompt Separators"; send "1"
+#     expect "Prompt Heads"; send "3"
+#     expect "Prompt Tails"; send "4"
+#     expect "Prompt Height"; send "1"
+#     expect "Prompt Spacing"; send "2"
+#     expect "Icons"; send "2"
+#     expect "Prompt Flow"; send "2"
+#     expect "Enable Transient Prompt?"; send "y"
+#     expect "Instant Prompt Mode"; send "1"
+#     expect "Apply changes to ~/.zshrc?"; send "y"
+#     expect eof
+# EOF
     check_command "Configuración de Powerlevel10k"
     echo -e "\n${green}[✓]${end} Powerlevel10k ha sido instalado y configurado.\n"
 }
@@ -221,13 +221,13 @@ install_polybar() {
     check_command "Configuración de polybar en bspwm"
 
     mkdir -p ~/.config/polybar
-    cat << EOF > ~/.config/polybar/launch.sh
-#!/bin/bash
+#     cat << EOF > ~/.config/polybar/launch.sh
+# #!/bin/bash
 
-killall -q polybar
+# killall -q polybar
 
-polybar main -c ~/.config/polybar/config.ini
-EOF
+# polybar main -c ~/.config/polybar/config.ini
+# EOF
     chmod +x ~/.config/polybar/launch.sh
     check_command "Creación del script de inicio de polybar"
 
@@ -239,30 +239,30 @@ EOF
     check_command "Creación de scripts para polybar"
 
     # Contenido de los scripts
-    echo '#!/bin/bash
+#     echo '#!/bin/bash
 
-echo " %{F#fff}$(/usr/sbin/ifconfig ens33 | grep "inet " | awk '\''{print $2}'\'')"' > ~/.config/bspwm/scripts/ethernet_status.sh
+# echo " %{F#fff}$(/usr/sbin/ifconfig ens33 | grep "inet " | awk '\''{print $2}'\'')"' > ~/.config/bspwm/scripts/ethernet_status.sh
 
-    echo '#!/bin/bash
+#     echo '#!/bin/bash
 
-IFACE=$(/usr/sbin/ifconfig | grep tun0 | awk '\''{print $1}'\'' | tr -d '\'':'\')
+# IFACE=$(/usr/sbin/ifconfig | grep tun0 | awk '\''{print $1}'\'' | tr -d '\'':'\')
 
-if [ "$IFACE" = "tun0" ]; then
-    echo " %{F#fff}$(/usr/sbin/ifconfig tun0 | grep "inet " | awk '\''{print $2}'\'')"
-else
-  echo " %{F#fff}Disconnected"
-fi' > ~/.config/bspwm/scripts/vpn_status.sh
+# if [ "$IFACE" = "tun0" ]; then
+#     echo " %{F#fff}$(/usr/sbin/ifconfig tun0 | grep "inet " | awk '\''{print $2}'\'')"
+# else
+#     echo " %{F#fff}Disconnected"
+# fi' > ~/.config/bspwm/scripts/vpn_status.sh
 
-    echo '#!/bin/bash
+#     echo '#!/bin/bash
 
-ip_address=$(/bin/cat ~/.config/bin/target | awk '\''{print $1}'\'')
-machine_name=$(/bin/cat ~/.config/bin/target | awk '\''{print $2}'\'')
+# ip_address=$(/bin/cat ~/.config/bin/target | awk '\''{print $1}'\'')
+# machine_name=$(/bin/cat ~/.config/bin/target | awk '\''{print $2}'\'')
 
-if [ $ip_address ] && [ $machine_name ]; then
-    echo "%{F#fff}$ip_address%{u-} - $machine_name"
-else
-    echo "%{u-}%{F#fff} No target"
-fi' > ~/.config/bspwm/scripts/target_to_hack.sh
+# if [ $ip_address ] && [ $machine_name ]; then
+#     echo "%{F#fff}$ip_address%{u-} - $machine_name"
+# else
+#     echo "%{u-}%{F#fff} No target"
+# fi' > ~/.config/bspwm/scripts/target_to_hack.sh
 
     check_command "Configuración de scripts para polybar"
 
@@ -271,69 +271,69 @@ fi' > ~/.config/bspwm/scripts/target_to_hack.sh
     check_command "Creación del archivo target"
 
     # Configuración de polybar
-    cat << EOF > ~/.config/polybar/config.ini
-[bar/main]
-width = 98%
-height = 40
-offset-x = 1%
-offset-y = 1%
-margin-bottom = 0
-background = #00000000
-module-margin = 5pt
-modules-left = ethernet_status vpn_status
-modules-center = workspaces
-modules-right = target_to_hack
-padding = 20px
-font-0 = "Hack Nerd Font Mono:style=regular:size=10;1"
-font-1 = "Hack Nerd Font Mono:style=regular:size=16;2"
-font-2 = "Hack Nerd Font Mono:style=regular:size=18;2"
-font-3 = "Hack Nerd Font Mono:style=regular:size=20;4"
+#     cat << EOF > ~/.config/polybar/config.ini
+# [bar/main]
+# width = 98%
+# height = 40
+# offset-x = 1%
+# offset-y = 1%
+# margin-bottom = 0
+# background = #00000000
+# module-margin = 5pt
+# modules-left = ethernet_status vpn_status
+# modules-center = workspaces
+# modules-right = target_to_hack
+# padding = 20px
+# font-0 = "Hack Nerd Font Mono:style=regular:size=10;1"
+# font-1 = "Hack Nerd Font Mono:style=regular:size=16;2"
+# font-2 = "Hack Nerd Font Mono:style=regular:size=18;2"
+# font-3 = "Hack Nerd Font Mono:style=regular:size=20;4"
 
-[module/ethernet_status]
-type = custom/script
-exec = ~/.config/bspwm/scripts/ethernet_status.sh
-interval = 2
-format-prefix = "󰈀"
-format-prefix-foreground = #2494e7
-format-prefix-font = 2
+# [module/ethernet_status]
+# type = custom/script
+# exec = ~/.config/bspwm/scripts/ethernet_status.sh
+# interval = 2
+# format-prefix = "󰈀"
+# format-prefix-foreground = #2494e7
+# format-prefix-font = 2
 
-[module/vpn_status]
-type = custom/script
-exec = ~/.config/bspwm/scripts/vpn_status.sh
-interval = 2
-format-prefix = "󰆧"
-format-prefix-foreground = #1bbf3e
-format-prefix-font = 2
+# [module/vpn_status]
+# type = custom/script
+# exec = ~/.config/bspwm/scripts/vpn_status.sh
+# interval = 2
+# format-prefix = "󰆧"
+# format-prefix-foreground = #1bbf3e
+# format-prefix-font = 2
 
-[module/workspaces]
-type = internal/xworkspaces
-icon-default = 
-format = <label-state>
-format-font = 3
-label-active = 󱓇
-label-active-foreground = #1bbf3e
-label-active-padding = 5px
-label-active-font = 4
-label-occupied = %icon%
-label-occupied-foreground = #ffff00
-label-occupied-padding = 5px
-label-occupied-font = 2
-label-urgent = %icon%
-label-urgent-foreground = #e51d0b
-label-urgent-padding = 5px
-label-empty = %icon%
-label-empty-foreground = #a1a1a1
-label-empty-padding = 5px
-label-empty-font = 2
+# [module/workspaces]
+# type = internal/xworkspaces
+# icon-default = 
+# format = <label-state>
+# format-font = 3
+# label-active = 󱓇
+# label-active-foreground = #1bbf3e
+# label-active-padding = 5px
+# label-active-font = 4
+# label-occupied = %icon%
+# label-occupied-foreground = #ffff00
+# label-occupied-padding = 5px
+# label-occupied-font = 2
+# label-urgent = %icon%
+# label-urgent-foreground = #e51d0b
+# label-urgent-padding = 5px
+# label-empty = %icon%
+# label-empty-foreground = #a1a1a1
+# label-empty-padding = 5px
+# label-empty-font = 2
 
-[module/target_to_hack]
-type = custom/script
-exec = ~/.config/bspwm/scripts/target_to_hack.sh
-interval = 2
-format-prefix = "󰓾"
-format-prefix-foreground = #e51d0b
-format-prefix-font = 2
-EOF
+# [module/target_to_hack]
+# type = custom/script
+# exec = ~/.config/bspwm/scripts/target_to_hack.sh
+# interval = 2
+# format-prefix = "󰓾"
+# format-prefix-foreground = #e51d0b
+# format-prefix-font = 2
+# EOF
     check_command "Configuración de polybar"
 }
 
@@ -425,14 +425,14 @@ install_rofi() {
 
 setup_burpsuite_launcher() {
     echo -e "\n${yellow}[+]${end} Configurando Burpsuite launcher...\n"
-    sudo tee /usr/bin/burpsuite-launcher > /dev/null << EOF
-#!/bin/bash
+#     sudo tee /usr/bin/burpsuite-launcher > /dev/null << EOF
+# #!/bin/bash
 
-export _JAVA_AWT_WM_NONREPARENTING=1
-wmname LG3D &
+# export _JAVA_AWT_WM_NONREPARENTING=1
+# wmname LG3D &
 
-/usr/bin/burpsuite
-EOF
+# /usr/bin/burpsuite
+# EOF
     sudo chmod +x /usr/bin/burpsuite-launcher
     check_command "Creación del launcher de Burpsuite"
 }
