@@ -50,42 +50,8 @@ configure_bspwm_sxhkd() {
     cp ~/Downloads/bspwm/examples/sxhkdrc ~/.config/sxhkd/
     check_command "Configuración inicial de bspwm y sxhkd"
 
-    # Modificar sxhkdrc
-    sed -i 's/super + {_,shift + }{h,j,k,l}/super + {_,shift + }{Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
-    sed -i 's/super + ctrl + {h,j,k,l}/super + ctrl + alt + {Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
-    sed -i 's/super + {h,j,k,l}/super + alt + shift + {Left,Down,Up,Right}/' ~/.config/sxhkd/sxhkdrc
-    echo -e "\n# custom resize\nsuper + alt + {Left,Down,Up,Right}\n    ~/.config/bspwm/scripts/bspwm_resize {west,south,north,east}" >> ~/.config/sxhkd/sxhkdrc
-    check_command "Modificación de sxhkd"
-
-    # Eliminar líneas específicas del sxhkdrc
-    sed -i '/^# expand a window by moving one of its side outward$/d' ~/.config/sxhkd/sxhkdrc
-    sed -i '/^super + alt + {h,j,k,l}$/d' ~/.config/sxhkd/sxhkdrc
-    sed -i '/^	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}$/d' ~/.config/sxhkd/sxhkdrc
-    sed -i '/^# contract a window by moving one of its side inward$/d' ~/.config/sxhkd/sxhkdrc
-    sed -i '/^super + alt + shift + {h,j,k,l}$/d' ~/.config/sxhkd/sxhkdrc
-    sed -i '/^	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}$/d' ~/.config/sxhkd/sxhkdrc
-    check_command "Eliminación de líneas específicas de sxhkdrc"
-
     # Crear script bspwm_resize
     mkdir -p ~/.config/bspwm/scripts
-    cat << EOF > ~/.config/bspwm/scripts/bspwm_resize
-#!/usr/bin/env dash
-
-if bspc query -N -n focused.floating > /dev/null; then
-    step=20
-else
-    step=100
-fi
-
-case "\$1" in
-    west) dir=right; falldir=left; x="-\$step"; y=0;;
-    east) dir=right; falldir=left; x="\$step"; y=0;;
-    north) dir=top; falldir=bottom; x=0; y="-\$step";;
-    south) dir=top; falldir=bottom; x=0; y="\$step";;
-esac
-
-bspc node -z "\$dir" "\$x" "\$y" || bspc node -z "\$falldir" "\$x" "\$y"
-EOF
     chmod +x ~/.config/bspwm/scripts/bspwm_resize
     check_command "Creación del script bspwm_resize"
 
@@ -481,12 +447,8 @@ EOF
     check_command "Creación del launcher de Burpsuite"
 }
 
-# Actualizar el sistema
-# sudo apt update && sudo apt upgrade -y
-# check_command "Actualización del sistema
-
 # Instalar dependencias básicas
-sudo apt install git wget curl build-essential expect -y
+sudo apt install git wget curl build-essential -y
 check_command "Instalación de dependencias básicas"
 
 # Crear directorios necesarios
@@ -499,22 +461,21 @@ main() {
     install_bspwm
     install_sxhkd
     configure_bspwm_sxhkd
-    install_kitty
-    install_zsh
-    install_fonts
-    install_powerlevel10k
-    install_picom
-    install_bat_and_lsd
-    install_feh
-    install_polybar
-    install_imagemagick
-    install_nvim_nvchad
-    install_fzf
-    install_i3lock
-    install_locate
-    install_rofi
-    setup_burpsuite_launcher
+    # install_kitty
+    # install_zsh
+    # install_fonts
+    # install_powerlevel10k
+    # install_picom
+    # install_bat_and_lsd
+    # install_feh
+    # install_polybar
+    # install_imagemagick
+    # install_nvim_nvchad
+    # install_fzf
+    # install_i3lock
+    # install_locate
+    # install_rofi
+    # setup_burpsuite_launcher
 }
 
-# Ejecutar la función principal
 main
