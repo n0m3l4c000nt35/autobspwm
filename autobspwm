@@ -21,48 +21,37 @@ check_command() {
 
 install_bspwm() {
     echo -e "\n${yellow}[+]${end} Instalando bspwm...\n"
+
     sudo apt install libxcb-xinerama0-dev libxcb-icccm4-dev libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev -y
-    check_command "Instalación de dependencias de bspwm"
     git clone https://github.com/baskerville/bspwm.git ~/Downloads/bspwm
     git clone https://github.com/baskerville/sxhkd.git ~/Downloads/sxhkd
     sudo make -C ~/Downloads/bspwm
     sudo make -C ~/Downloads/bspwm install
-    check_command "Instalación de bspwm"
-    which bspwm
+
     check_command "Verificación de la instalación de bspwm"
 }
 
 install_sxhkd() {
     echo -e "\n${yellow}[+]${end} Instalando sxhkd...\n"
-    cd ~/Downloads/sxhkd
+
     sudo make -C ~/Downloads/sxhkd
     sudo make -C ~/Downloads/sxhkd install
-    check_command "Instalación de sxhkd"
-    which sxhkd
+
     check_command "Verificación de la instalación sxhkd"
 }
 
 configure_bspwm_sxhkd() {
     echo -e "\n${yellow}[+]${end} Configurando bspwm y sxhkd...\n"
+
     wget -P ~/.config/bspwm/ https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/bspwmrc
     chmod +x ~/.config/bspwm/bspwmrc
     sudo apt install bspwm -y
-    cp ~/Downloads/bspwm/examples/sxhkdrc ~/.config/sxhkd/
-    check_command "Configuración inicial de bspwm y sxhkd"
-
-    # Crear script bspwm_resize
+    wget -P ~/.config/sxhkd/ https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/sxhkdrc
     mkdir -p ~/.config/bspwm/scripts
-    wget -P ~/.config/bspwm/scripts https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/bspwmrc
+    wget -P ~/.config/bspwm/scripts https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/bspwm_resize
     chmod +x ~/.config/bspwm/scripts/bspwm_resize
-    check_command "Creación del script bspwm_resize"
 
-    # Agregar configuración para VMware
-    echo "vmware-user-suid-wrapper &" >> ~/.config/bspwm/bspwmrc
-    check_command "Configuración para VMware"
-
-    # Agregar atajo para Firefox
-    echo -e "\n# open firefox\nsuper + shift + f\n    /usr/bin/firefox" >> ~/.config/sxhkd/sxhkdrc
-    check_command "Atajo para Firefox añadido"
+    check_command "Configuración inicial de bspwm y sxhkd"
 }
 
 install_kitty() {
