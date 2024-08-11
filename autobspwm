@@ -105,7 +105,7 @@ install_powerlevel10k() {
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
     wget -P $HOME https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/.p10k.zsh
     sudo cp ~/.p10k.zsh /root/.p10k.zsh
-    chown root:root /usr/local/share/zsh/site-functions/_bspc
+    sudo chown root:root /usr/local/share/zsh/site-functions/_bspc
 
     check_command "Verificación de la instalación de powerlevel10k"
 }
