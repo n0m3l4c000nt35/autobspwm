@@ -418,7 +418,7 @@ main() {
     install_bspwm
     install_sxhkd
     configure_bspwm_sxhkd
-    # install_kitty
+    install_kitty
     # install_zsh
     # install_fonts
     # install_powerlevel10k
