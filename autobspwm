@@ -103,7 +103,7 @@ install_powerlevel10k() {
     echo -e "\n${yellow}[+]${end} Instalando powerlevel10k...\n"
 
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-    echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+    wget -P $HOME https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/.p10k.zsh
 
     check_command "Verificación de la instalación de powerlevel10k"
 }
