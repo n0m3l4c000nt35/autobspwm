@@ -141,6 +141,7 @@ install_feh() {
     echo -e "\n${yellow}[+]${end} Instalando feh...\n"
 
     sudo apt install feh -y
+    wget -P ~/Pictures https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/wallpaper.jpg
 
     check_command "Verificación de la instalación de feh"
 }
@@ -174,16 +175,13 @@ install_nvim_nvchad() {
     echo -e "\n${yellow}[+]${end} Instalando nvim y nvchad...\n"
 
     git clone https://github.com/NvChad/starter ~/.config/nvim
-    wget -P ~/Downloads https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
     sudo mkdir /opt/nvim
-    sudo mv ~/Downloads/nvim-linux64.tar.gz /opt/nvim
+    sudo wget -P /opt/nvim https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
     sudo tar -xf /opt/nvim/nvim-linux64.tar.gz -C /opt/nvim
     sudo rm /opt/nvim/nvim-linux64.tar.gz
-    echo 'export PATH=/opt/nvim/nvim-linux64/bin:$PATH' >> ~/.zshrc
-    source ~/.zshrc
     nvim --headless -c 'quitall'
-    echo "vim.opt.listchars = \"tab:»·,trail:·\"" >> ~/.config/nvim/init.lua
-    sed -i '/theme = "onedark",/a\  transparency = true,' ~/.config/nvim/lua/chadrc.lua
+    sed -i '/vim.g.mapleader = " "/a vim.opt.listchars = "tab:»·,trail:·"' ~/.config/nvim/init.lua
+    sed -i '/theme = "onedark",/a\    transparency = true,' ~/.config/nvim/lua/chadrc.lua
     nvim --headless -c 'MasonInstallAll' -c 'quitall'
     sudo mkdir -p /root/.config/nvim
     sudo cp -r ~/.config/nvim/* /root/.config/nvim
@@ -207,8 +205,7 @@ install_i3lock() {
 
     sudo apt install i3lock -y
     sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy
-    cd /opt/i3lock-fancy
-    sudo make install
+    sudo make -C /opt/i3lock-fancy install
 
     check_command "Verificación de la instalación de i3lock-fancy"
 }
@@ -230,7 +227,6 @@ check_command "Instalación de dependencias básicas"
 mkdir -p ~/.config/{bspwm/scripts,sxhkd,kitty,picom,polybar,bin}
 check_command "Creación de directorios de configuración"
 
-# Función principal
 main() {
     echo -e "\n${yellow}[+]${end} Comenzando la personalización del sistema..."
     install_bspwm
@@ -244,11 +240,11 @@ main() {
     install_bat_and_lsd
     install_feh
     install_polybar
-    # install_imagemagick
-    # install_nvim_nvchad
-    # install_fzf
-    # install_i3lock
-    # install_locate
+    install_imagemagick
+    install_nvim_nvchad
+    install_fzf
+    install_i3lock
+    install_locate
 }
 
 main
