@@ -393,8 +393,8 @@ main() {
     configure_bspwm_sxhkd
     install_kitty
     install_zsh
-    # install_fonts
-    # install_powerlevel10k
+    install_fonts
+    install_powerlevel10k
     # install_picom
     # install_bat_and_lsd
     # install_feh
