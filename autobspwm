@@ -156,6 +156,7 @@ install_polybar() {
         touch ~/.config/bspwm/scripts/$script
         chmod +x ~/.config/bspwm/scripts/$script
     done
+    sed -i "s/interface/$(ifconfig | grep -o '^[a-zA-Z0-9]\+' | grep -v '^lo$')/" ~/.config/bspwm/scripts/ethernet_status.sh
     touch ~/.config/bin/target
 
     check_command "Verificación de la instalación de polybar"
