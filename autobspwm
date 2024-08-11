@@ -47,7 +47,6 @@ configure_bspwm_sxhkd() {
     chmod +x ~/.config/bspwm/bspwmrc
     sudo apt install bspwm -y
     wget -P ~/.config/sxhkd/ https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/sxhkdrc
-    mkdir -p ~/.config/bspwm/scripts
     wget -P ~/.config/bspwm/scripts https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/bspwm_resize
     chmod +x ~/.config/bspwm/scripts/bspwm_resize
 
@@ -63,7 +62,6 @@ install_kitty() {
     sudo tar -xf ~/Downloads/kitty-0.35.2-x86_64.txz -C ~/Downloads/kitty
     sudo rm -rf ~/Downloads/kitty-0.35.2-x86_64.txz
     sudo mv ~/Downloads/kitty/ /opt/
-    mkdir -p ~/.config/kitty
     sudo mkdir -p /root/.config/kitty
     wget -P ~/.config/kitty https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/kitty.conf
     wget -P ~/.config/kitty https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/Box.conf
@@ -107,177 +105,60 @@ install_powerlevel10k() {
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
     wget -P $HOME https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/.p10k.zsh
     sudo cp ~/.p10k.zsh /root/.p10k.zsh
+    chown root:root /usr/local/share/zsh/site-functions/_bspc
 
     check_command "Verificación de la instalación de powerlevel10k"
 }
 
 install_picom() {
     echo -e "\n${yellow}[+]${end} Instalando picom...\n"
+
     sudo apt install libconfig-dev libdbus-1-dev libegl-dev libev-dev libgl-dev libepoxy-dev libpcre2-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev -y
-    check_command "Instalación de dependencias de picom"
-
     git clone https://github.com/yshui/picom ~/Downloads/picom
-    cd ~/Downloads/picom
-    meson setup --buildtype=release build
-    ninja -C build
-    sudo ninja -C build install
-    cd ~
+    meson setup --buildtype=release ~/Downloads/picom/build ~/Downloads/picom
+    ninja -C ~/Downloads/picom/build
+    sudo ninja -C ~/Downloads/picom/build install
     rm -rf ~/Downloads/picom
-    check_command "Instalación de picom"
+    touch ~/.config/picom/picom.conf
+    wget -O ~/.config/picom/picom.conf https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/picom.conf
 
-    which picom
     check_command "Verificación de la instalación de picom"
-
-    mkdir -p ~/.config/picom
-    wget -O ~/.config/picom/picom.conf https://raw.githubusercontent.com/yshui/picom/next/picom.sample.conf
-    check_command "Configuración de picom"
-
-    echo "picom &" >> ~/.config/bspwm/bspwmrc
-    check_command "Agregado de picom al inicio de bspwm"
 }
 
 install_bat_and_lsd() {
     echo -e "\n${yellow}[+]${end} Instalando bat y lsd...\n"
+
     wget -P ~/Downloads https://github.com/sharkdp/bat/releases/download/v0.24.0/bat_0.24.0_amd64.deb
     wget -P ~/Downloads https://github.com/lsd-rs/lsd/releases/download/v1.1.2/lsd_1.1.2_amd64.deb
     sudo dpkg -i ~/Downloads/bat_0.24.0_amd64.deb
     sudo dpkg -i ~/Downloads/lsd_1.1.2_amd64.deb
     rm ~/Downloads/bat_0.24.0_amd64.deb ~/Downloads/lsd_1.1.2_amd64.deb
-    check_command "Instalación de bat y lsd"
+
+    check_command "Verificación de la instalación de bat y lsd"
 }
 
 install_feh() {
     echo -e "\n${yellow}[+]${end} Instalando feh...\n"
-    sudo apt install feh -y
-    check_command "Instalación de feh"
 
-    echo '/usr/bin/feh --bg-center ~/Pictures/cambiaestoporfavor.png' >> ~/.config/bspwm/bspwmrc
-    check_command "Configuración de feh en bspwm"
+    sudo apt install feh -y
+
+    check_command "Verificación de la instalación de feh"
 }
 
 install_polybar() {
     echo -e "\n${yellow}[+]${end} Instalando polybar...\n"
+
     sudo apt install polybar -y
-    check_command "Instalación de polybar"
-
-    echo '~/.config/polybar/./launch.sh &' >> ~/.config/bspwm/bspwmrc
-    check_command "Configuración de polybar en bspwm"
-
-    mkdir -p ~/.config/polybar
-#     cat << EOF > ~/.config/polybar/launch.sh
-# #!/bin/bash
-
-# killall -q polybar
-
-# polybar main -c ~/.config/polybar/config.ini
-# EOF
+    wget -P ~/.config/polybar https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/launch.sh
     chmod +x ~/.config/polybar/launch.sh
-    check_command "Creación del script de inicio de polybar"
-
-    mkdir -p ~/.config/bspwm/scripts
     for script in ethernet_status.sh vpn_status.sh target_to_hack.sh; do
+        wget -P ~/.config/bspwm/scripts/$script https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/$script
         touch ~/.config/bspwm/scripts/$script
         chmod +x ~/.config/bspwm/scripts/$script
     done
-    check_command "Creación de scripts para polybar"
-
-    # Contenido de los scripts
-#     echo '#!/bin/bash
-
-# echo " %{F#fff}$(/usr/sbin/ifconfig ens33 | grep "inet " | awk '\''{print $2}'\'')"' > ~/.config/bspwm/scripts/ethernet_status.sh
-
-#     echo '#!/bin/bash
-
-# IFACE=$(/usr/sbin/ifconfig | grep tun0 | awk '\''{print $1}'\'' | tr -d '\'':'\')
-
-# if [ "$IFACE" = "tun0" ]; then
-#     echo " %{F#fff}$(/usr/sbin/ifconfig tun0 | grep "inet " | awk '\''{print $2}'\'')"
-# else
-#     echo " %{F#fff}Disconnected"
-# fi' > ~/.config/bspwm/scripts/vpn_status.sh
-
-#     echo '#!/bin/bash
-
-# ip_address=$(/bin/cat ~/.config/bin/target | awk '\''{print $1}'\'')
-# machine_name=$(/bin/cat ~/.config/bin/target | awk '\''{print $2}'\'')
-
-# if [ $ip_address ] && [ $machine_name ]; then
-#     echo "%{F#fff}$ip_address%{u-} - $machine_name"
-# else
-#     echo "%{u-}%{F#fff} No target"
-# fi' > ~/.config/bspwm/scripts/target_to_hack.sh
-
-    check_command "Configuración de scripts para polybar"
-
-    mkdir -p ~/.config/bin
     touch ~/.config/bin/target
-    check_command "Creación del archivo target"
 
-    # Configuración de polybar
-#     cat << EOF > ~/.config/polybar/config.ini
-# [bar/main]
-# width = 98%
-# height = 40
-# offset-x = 1%
-# offset-y = 1%
-# margin-bottom = 0
-# background = #00000000
-# module-margin = 5pt
-# modules-left = ethernet_status vpn_status
-# modules-center = workspaces
-# modules-right = target_to_hack
-# padding = 20px
-# font-0 = "Hack Nerd Font Mono:style=regular:size=10;1"
-# font-1 = "Hack Nerd Font Mono:style=regular:size=16;2"
-# font-2 = "Hack Nerd Font Mono:style=regular:size=18;2"
-# font-3 = "Hack Nerd Font Mono:style=regular:size=20;4"
-
-# [module/ethernet_status]
-# type = custom/script
-# exec = ~/.config/bspwm/scripts/ethernet_status.sh
-# interval = 2
-# format-prefix = "󰈀"
-# format-prefix-foreground = #2494e7
-# format-prefix-font = 2
-
-# [module/vpn_status]
-# type = custom/script
-# exec = ~/.config/bspwm/scripts/vpn_status.sh
-# interval = 2
-# format-prefix = "󰆧"
-# format-prefix-foreground = #1bbf3e
-# format-prefix-font = 2
-
-# [module/workspaces]
-# type = internal/xworkspaces
-# icon-default = 
-# format = <label-state>
-# format-font = 3
-# label-active = 󱓇
-# label-active-foreground = #1bbf3e
-# label-active-padding = 5px
-# label-active-font = 4
-# label-occupied = %icon%
-# label-occupied-foreground = #ffff00
-# label-occupied-padding = 5px
-# label-occupied-font = 2
-# label-urgent = %icon%
-# label-urgent-foreground = #e51d0b
-# label-urgent-padding = 5px
-# label-empty = %icon%
-# label-empty-foreground = #a1a1a1
-# label-empty-padding = 5px
-# label-empty-font = 2
-
-# [module/target_to_hack]
-# type = custom/script
-# exec = ~/.config/bspwm/scripts/target_to_hack.sh
-# interval = 2
-# format-prefix = "󰓾"
-# format-prefix-foreground = #e51d0b
-# format-prefix-font = 2
-# EOF
-    check_command "Configuración de polybar"
+    check_command "Verificación de la instalación de polybar"
 }
 
 install_imagemagick() {
@@ -385,7 +266,7 @@ sudo apt install git wget curl build-essential -y
 check_command "Instalación de dependencias básicas"
 
 # Crear directorios necesarios
-mkdir -p ~/.config/{bspwm,sxhkd,kitty,picom,polybar}
+mkdir -p ~/.config/{bspwm/scripts,sxhkd,kitty,picom,polybar,bin}
 check_command "Creación de directorios de configuración"
 
 # Función principal
