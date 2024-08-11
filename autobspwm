@@ -155,7 +155,7 @@ install_polybar() {
         wget -P ~/.config/bspwm/scripts/ https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/$script
         chmod +x ~/.config/bspwm/scripts/$script
     done
-    interface=$(/usr/sbin/ifconfig 2>/dev/null | grep -o '^[a-zA-Z0-9]\+' | grep -v '^lo$') || interface=$(ip -o -4 route show to default | awk '{print $5}'); sed -i "s/interface/$interface/" ethernet_status.sh
+    interface=$(/usr/sbin/ifconfig 2>/dev/null | grep -o '^[a-zA-Z0-9]\+' | grep -v '^lo$') || interface=$(ip -o -4 route show to default | awk '{print $5}'); sed -i "s/interface/$interface/" ~/.config/bspwm/scripts/ethernet_status.sh
     touch ~/.config/bin/target
 
     check_command "Verificación de la instalación de polybar"
