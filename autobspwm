@@ -51,58 +51,24 @@ configure_bspwm_sxhkd() {
     wget -P ~/.config/bspwm/scripts https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/bspwm_resize
     chmod +x ~/.config/bspwm/scripts/bspwm_resize
 
-    check_command "Configuración inicial de bspwm y sxhkd"
+    check_command "Configuración de bspwm y sxhkd"
 }
 
 install_kitty() {
     echo -e "\n${yellow}[+]${end} Instalando kitty...\n"
+
     sudo mkdir -p /opt/kitty
-    wget -P ~/Downloads https://github.com/kovidgoyal/kitty/releases/download/v0.34.1/kitty-0.34.1-x86_64.txz
+    wget -P ~/Downloads https://github.com/kovidgoyal/kitty/releases/download/v0.35.2/kitty-0.35.2-x86_64.txz
     mkdir ~/Downloads/kitty
-    sudo tar -xf ~/Downloads/kitty-0.34.1-x86_64.txz -C ~/Downloads/kitty
-    sudo rm -rf ~/Downloads/kitty-0.34.1-x86_64.txz
+    sudo tar -xf ~/Downloads/kitty-0.35.2-x86_64.txz -C ~/Downloads/kitty
+    sudo rm -rf ~/Downloads/kitty-0.35.2-x86_64.txz
     sudo mv ~/Downloads/kitty/ /opt/
-    check_command "Instalación de kitty"
-
-    # Configurar sxhkd para usar kitty
-    sed -i 's|urxvt|/opt/kitty/bin/kitty|g' ~/.config/sxhkd/sxhkdrc
-    check_command "Configuración de sxhkd para kitty"
-
-    # Configurar kitty
     mkdir -p ~/.config/kitty
-#     cat << EOF > ~/.config/kitty/kitty.conf
-# font_family HackNerdFont
-# cursor_shape beam
-
-# map ctrl+left neighboring_window left
-# map ctrl+right neighboring_window right
-# map ctrl+up neighboring_window up
-# map ctrl+down neighboring_window down
-
-# map ctrl+shift+enter new_window_with_cwd
-# map ctrl+shift+t new_tab_with_cwd
-
-# map f1 copy_to_buffer a
-# map f2 paste_from_buffer a
-# map f3 copy_to_buffer b
-# map f4 paste_from_buffer b
-
-# map ctrl+shift+z toggle_layout stack
-# tab_bar_style powerline
-
-# inactive_tab_background #e06c75
-# active_tab_background #98c379
-# inactive_tab_foreground #000000
-# tab_bar_margin_color #000000
-
-# background_opacity 0.95
-# EOF
-    check_command "Configuración de kitty"
-
-    # Copiar configuración para root
     sudo mkdir -p /root/.config/kitty
+    wget -P ~/.config/kitty
     sudo cp ~/.config/kitty/* /root/.config/kitty
-    check_command "Copia de configuración de kitty para root"
+
+    check_command "Verificación de la instalación de kitty"
 }
 
 install_zsh() {
