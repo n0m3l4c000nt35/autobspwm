@@ -68,6 +68,8 @@ install_kitty() {
     wget -P ~/.config/kitty https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/kitty.conf
     wget -P ~/.config/kitty https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/Box.conf
     sudo cp ~/.config/kitty/* /root/.config/kitty
+    sudo ln -s /opt/kitty/bin/kitty /usr/bin/kitty
+    sudo ln -s /opt/kitty/bin/kitten /usr/bin/kitten
 
     check_command "Verificación de la instalación de kitty"
 }
