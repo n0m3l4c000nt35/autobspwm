@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo " %{F#fff}$(/usr/sbin/ifconfig ens33 | grep "inet " | awk '{print $2}')"
+echo " %{F#fff}$(/usr/sbin/ifconfig interface | grep "inet " | awk '{print $2}')"
