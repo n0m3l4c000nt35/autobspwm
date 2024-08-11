@@ -80,57 +80,32 @@ install_zsh() {
     sudo apt install zsh-autosuggestions zsh-syntax-highlighting zsh-autocomplete -y
     sudo usermod --shell /usr/bin/zsh $USER
     sudo usermod --shell /usr/bin/zsh root
+    wget -P $HOME https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/.zshrc
 
     check_command "Verificación de la instalación de zsh"
 }
 
 install_fonts() {
     echo -e "\n${yellow}[+}${end} Instalando fuentes...\n"
+
     sudo wget -P /usr/local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip
     sudo unzip /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts
     sudo rm -rf /usr/local/share/fonts/Hack.zip /usr/local/share/fonts/README.md /usr/local/share/fonts/LICENSE.md
-    check_command "Instalación de Hack Nerd Font"
-
     git clone https://github.com/VaughnValle/blue-sky.git ~/Downloads
     sudo cp blue-sky/polybar/fonts/* /usr/share/fonts/truetype
     sudo fc-cache -v
     rm -rf ~/Downloads/blue-sky
-    check_command "Instalación de fuentes adicionales"
+
+    check_command "Verificación de la instalación de fuentes"
 }
 
 install_powerlevel10k() {
     echo -e "\n${yellow}[+]${end} Instalando powerlevel10k...\n"
+
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
     echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
-    check_command "Instalación de powerlevel10k"
 
-    echo -e "\n${yellow}[+]${end} Configurando Powerlevel10k...\n"
-    
-#     expect <<EOF
-#     spawn zsh
-#     expect "Does this look like a diamond (rotated square)?"; send "y"
-#     expect "Does this look like a lock?"; send "y"
-#     expect "Does this look like an upwards arrow?"; send "y"
-#     expect "What digit is the downwards arrow pointing at?"; send "1"
-#     expect "Do all these icons fit between the crosses?"; send "y"
-#     expect "Prompt Style"; send "2"
-#     expect "Character Set"; send "1"
-#     expect "Prompt Color"; send "2"
-#     expect "Show current time?"; send "n"
-#     expect "Prompt Separators"; send "1"
-#     expect "Prompt Heads"; send "3"
-#     expect "Prompt Tails"; send "4"
-#     expect "Prompt Height"; send "1"
-#     expect "Prompt Spacing"; send "2"
-#     expect "Icons"; send "2"
-#     expect "Prompt Flow"; send "2"
-#     expect "Enable Transient Prompt?"; send "y"
-#     expect "Instant Prompt Mode"; send "1"
-#     expect "Apply changes to ~/.zshrc?"; send "y"
-#     expect eof
-# EOF
-    check_command "Configuración de Powerlevel10k"
-    echo -e "\n${green}[✓]${end} Powerlevel10k ha sido instalado y configurado.\n"
+    check_command "Verificación de la instalación de powerlevel10k"
 }
 
 install_picom() {
