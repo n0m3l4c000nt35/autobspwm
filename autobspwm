@@ -65,7 +65,8 @@ install_kitty() {
     sudo mv ~/Downloads/kitty/ /opt/
     mkdir -p ~/.config/kitty
     sudo mkdir -p /root/.config/kitty
-    wget -P ~/.config/kitty
+    wget -P ~/.config/kitty https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/kitty.conf
+    wget -P ~/.config/kitty https://raw.githubusercontent.com/n0m3l4c000nt35/autobspwm/main/files/Box.conf
     sudo cp ~/.config/kitty/* /root/.config/kitty
 
     check_command "Verificación de la instalación de kitty"
