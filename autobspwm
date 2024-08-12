@@ -214,6 +214,12 @@ install_locate() {
     echo -e "\n${yellow}[+]${end} Instalando locate...\n"
 
     sudo apt install locate -y
+    if mountpoint -q /run/user/1000/doc; then
+        sudo umount /run/user/1000/doc
+    fi
+    if mountpoint -q /run/user/1000/gvfs; then
+        sudo umount /run/user/1000/gvfs
+    fi
     sudo updatedb
     
     check_command "Verificación de la instalación de locate"
