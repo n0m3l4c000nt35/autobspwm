@@ -179,6 +179,7 @@ install_nvim_nvchad() {
     sudo wget -P /opt/nvim https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
     sudo tar -xf /opt/nvim/nvim-linux64.tar.gz -C /opt/nvim
     sudo rm /opt/nvim/nvim-linux64.tar.gz
+    sudo ln -s /opt/nvim/nvim-linux64/bin/nvim /usr/bin/nvim
     nvim --headless -c 'quitall'
     sed -i '/vim.g.mapleader = " "/a vim.opt.listchars = "tab:»·,trail:·"' ~/.config/nvim/init.lua
     sed -i '/theme = "onedark",/a\    transparency = true,' ~/.config/nvim/lua/chadrc.lua
