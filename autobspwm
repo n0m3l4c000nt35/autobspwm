@@ -193,9 +193,8 @@ install_nvim_nvchad() {
     sudo ln -s /opt/nvim/nvim-linux64/bin/nvim /usr/bin/nvim
     nvim --headless -c 'quitall'
     sed -i '/vim.g.mapleader = " "/a vim.opt.listchars = "tab:»·,trail:·"' ~/.config/nvim/init.lua
-    sed -i '/theme = "onedark",/a\    transparency = true,' ~/.config/nvim/lua/chadrc.lua
-    # nvim --headless -c 'MasonInstallAll' -c 'quitall'
-    nvim --headless -c 'MasonInstallAll' -c 'autocmd User MasonUpdateAllComplete quitall'
+    sed -i '/theme = "onedark",/a\  transparency = true,' ~/.config/nvim/lua/chadrc.lua
+    nvim --headless -c 'MasonInstallAll' -c 'quitall'
     sudo mkdir -p /root/.config/nvim
     sudo cp -r ~/.config/nvim/* /root/.config/nvim
 
