@@ -176,6 +176,15 @@ install_imagemagick() {
 install_nvim_nvchad() {
     echo -e "\n${yellow}[+]${end} Instalando nvim y nvchad...\n"
 
+    if command -v nvim &> /dev/null; then
+        sudo apt remove neovim -y
+    fi
+    if [ -f "/usr/share/applications/nvim.desktop" ]; then
+        sudo rm -f /usr/share/applications/nvim.desktop
+    fi
+    if [ -f "/usr/share/applications/vim.desktop" ]; then
+        sudo rm -f /usr/share/applications/vim.desktop
+    fi
     git clone https://github.com/NvChad/starter ~/.config/nvim
     sudo mkdir /opt/nvim
     sudo wget -P /opt/nvim https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz
