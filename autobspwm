@@ -10,6 +10,7 @@ gray="\e[0;37m\033[1m"
 end="\033[0m\e[0m"
 
 banner(){
+    echo
     cat << 'EOF'
                                 s                      ..       .x+=:.                                                        
                                :8                . uW8"        z`    ^%                  x=~                                  
