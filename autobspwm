@@ -214,6 +214,7 @@ install_nvim_nvchad() {
     nvim --headless -c 'quitall'
     sed -i '/vim.g.mapleader = " "/a vim.opt.listchars = "tab:»·,trail:·"' ~/.config/nvim/init.lua
     sed -i '/theme = "onedark",/a\  transparency = true,' ~/.config/nvim/lua/chadrc.lua
+    nvim --headless "+Lazy! sync" "+Lazy! build all" +qa
     nvim --headless "+MasonInstallAll" +qa
     sudo mkdir -p /root/.config/nvim
     sudo cp -r ~/.config/nvim/* /root/.config/nvim
