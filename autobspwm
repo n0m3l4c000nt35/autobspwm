@@ -9,6 +9,26 @@ turquoise="\e[0;36m\033[1m"
 gray="\e[0;37m\033[1m"
 end="\033[0m\e[0m"
 
+banner(){
+    cat << 'EOF'
+                                s                      ..       .x+=:.                                                        
+                               :8                . uW8"        z`    ^%                  x=~                                  
+               x.    .        .88           u.   `t888            .   <k  .d``          88x.   .e.   .e.     ..    .     :    
+      u      .@88k  z88u     :888ooo  ...ue888b   8888   .      .@8Ned8"  @8Ne.   .u   '8888X.x888:.x888   .888: x888  x888.  
+   us888u.  ~"8888 ^8888   -*8888888  888R Y888r  9888.z88N   .@^%8888"   %8888:u@88N   `8888  888X '888k ~`8888~'888X`?888f` 
+.@88 "8888"   8888  888R     8888     888R I888>  9888  888E x88:  `)8b.   `888I  888.   X888  888X  888X   X888  888X '888>  
+9888  9888    8888  888R     8888     888R I888>  9888  888E 8888N=*8888    888I  888I   X888  888X  888X   X888  888X '888>  
+9888  9888    8888  888R     8888     888R I888>  9888  888E  %8"    R88    888I  888I   X888  888X  888X   X888  888X '888>  
+9888  9888    8888 ,888B .  .8888Lu= u8888cJ888   9888  888E   @8Wou 9%   uW888L  888'  .X888  888X. 888~   X888  888X '888>  
+9888  9888   "8888Y 8888"   ^%888*    "*888*P"   .8888  888" .888888P`   '*88888Nu88P   `%88%``"*888Y"     "*88%""*88" '888!` 
+"888*""888"   `Y"   'YP       'Y"       'Y"       `%888*%"   `   ^"F     ~ '88888F`       `~     `"          `~    "    `"`   
+ ^Y"   ^Y'                                           "`                     888 ^                                             
+                                                                            *8E                                               
+                                                                            '8>                                               
+                                                                             "                                          
+    EOF
+}
+
 # Función para verificar si un comando se ejecutó correctamente
 check_command() {
     if [ $? -eq 0 ]; then
@@ -246,6 +266,7 @@ mkdir -p ~/.config/{bspwm/scripts,sxhkd,kitty,picom,polybar,bin}
 check_command "Creación de directorios de configuración"
 
 main() {
+    banner
     echo -e "\n${yellow}[+]${end} Comenzando la personalización del sistema..."
     install_bspwm
     install_sxhkd
