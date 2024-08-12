@@ -26,7 +26,7 @@ banner(){
                                                                             *8E                                               
                                                                             '8>                                               
                                                                              "                                          
-    EOF
+EOF
 }
 
 # Función para verificar si un comando se ejecutó correctamente
