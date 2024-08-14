@@ -263,9 +263,9 @@ install_locate() {
 
 show_final_message() {
     if [ "$installation_error" = false ]; then
-        echo -e "\n${green}[|]${end}############################################${green}[|]${end}"
+        echo -e "\n${green}[♣]${end}###########################################${green}[♠]${end}"
         echo -e "${green}[✔]${end} La instalación ha finalizado exitosamente ${green}[✔]${end}"
-        echo -e "${green}[|]${end}############################################${green}[|]${end}\n"
+        echo -e "${green}[♥]${end}###########################################${green}[♦]${end}\n"
     else
         echo -e "\n${red}[✘] La instalación ha fallado.${end}"
         echo -e "Error: $error_message"
