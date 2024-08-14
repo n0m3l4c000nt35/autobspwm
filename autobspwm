@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 green="\e[0;32m\033[1m"
 red="\e[0;31m\033[1m"
@@ -8,6 +8,9 @@ purple="\e[0;35m\033[1m"
 turquoise="\e[0;36m\033[1m"
 gray="\e[0;37m\033[1m"
 end="\033[0m\e[0m"
+
+installation_error=false
+error_message=""
 
 banner(){
     echo
@@ -30,13 +33,14 @@ banner(){
 EOF
 }
 
-# Función para verificar si un comando se ejecutó correctamente
 check_command() {
     if [ $? -eq 0 ]; then
         echo -e "\n${green}[OK]${end} $1"
     else
         echo -e "\n${red}[ERROR]${end} $1"
-        exit 1
+        installation_error=true
+        error_message="Error en: $1"
+        return 1
     fi
 }
 
@@ -49,7 +53,7 @@ install_bspwm() {
     sudo make -C ~/Downloads/bspwm
     sudo make -C ~/Downloads/bspwm install
 
-    check_command "Verificación de la instalación de bspwm"
+    check_command "Verificación de la instalación de bspwm" || return 1
 }
 
 install_sxhkd() {
@@ -257,6 +261,18 @@ install_locate() {
     check_command "Verificación de la instalación de locate"
 }
 
+show_final_message() {
+    if [ "$installation_error" = false ]; then
+        echo -e "\n${green}[✔] La instalación ha finalizado exitosamente.${end}"
+        echo -e "Todas las herramientas se han instalado correctamente."
+    else
+        echo -e "\n${red}[✘] La instalación ha fallado.${end}"
+        echo -e "Error: $error_message"
+        echo -e "Por favor, informa de este error para que pueda mejorar el script."
+        echo -e "Puedes reportar el error en: https://github.com/n0m3l4c000nt35/autobspwm/issues"
+    fi
+}
+
 # Instalar dependencias básicas
 sudo apt install git wget curl build-essential -y
 check_command "Instalación de dependencias básicas"
@@ -268,22 +284,28 @@ check_command "Creación de directorios de configuración"
 main() {
     banner
     echo -e "\n${yellow}[+]${end} Comenzando la personalización del sistema..."
-    install_bspwm
-    install_sxhkd
-    configure_bspwm_sxhkd
-    install_kitty
-    install_zsh
-    install_fonts
-    install_powerlevel10k
-    install_picom
-    install_bat_and_lsd
-    install_feh
-    install_polybar
-    install_imagemagick
-    install_nvim_nvchad
-    install_fzf
-    install_i3lock
-    install_locate
+    install_bspwm || return
+    install_sxhkd || return
+    configure_bspwm_sxhkd || return
+    install_kitty || return
+    install_zsh || return
+    install_fonts || return
+    install_powerlevel10k || return
+    install_picom || return
+    install_bat_and_lsd || return
+    install_feh || return
+    install_polybar || return
+    install_imagemagick || return
+    install_nvim_nvchad || return
+    install_fzf || return
+    install_i3lock || return
+    install_locate || return
+    show_final_message
 }
 
-main
+main || {
+    echo -e "\n${red}[✘] Se ha producido un error inesperado.${end}"
+    echo -e "Por favor, informe de este error para que podamos mejorar el script."
+    echo -e "Puede reportar el error en: https://github.com/tu_usuario/tu_repositorio/issues"
+    exit 1
+}
